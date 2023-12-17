@@ -1,0 +1,13 @@
+body{margin: 0;padding: 0;box-sizing: border-box;max-width: 100%;font-family: 'Poppins', sans-serif;background-color: #ffffff;}
+h1, h2, h3, h4, h5, h6, ul, ol, li, p{margin: 0;padding: 0;}
+ul, ol{list-style: none;}
+a{text-decoration: none;color: black;}     
+img {max-width: 100%;display: block;}
+* {
+  font-family: 'Poppins', sans-serif;
+}
+.container {
+  max-width: 1300px;
+  margin: 0 auto;
+  box-sizing: border-box;
+}

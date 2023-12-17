@@ -1,0 +1,132 @@
+body {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    max-width: 100%;
+    font-family: 'Poppins', sans-serif;
+    background-color: #ffffff;
+    overflow: hidden;
+}
+h1, h2, h3, h4, h5, h6, ul, ol, li, p{margin: 0;padding: 0;}
+ul, ol{list-style: none;}
+a{text-decoration: none;color: black;}     
+img {max-width: 100%;display: block;}
+
+*{
+  font-family: 'Poppins', sans-serif;
+}
+.login__wrapper {
+  background-image: url("../../img/background.jpg");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: calc(100vh - 90px);
+}
+.login-block {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 30px;
+  background-color: #fff;
+}
+.login-block__title {
+  margin-bottom: 25px;
+  color: #333333;
+  padding: 0 10px 15px 10px;
+  text-align: center;
+  font-weight: 400;
+  font-size: 24px;
+  border-bottom: 2px solid #c96;
+}
+.login-block__input-block {
+  margin-top: 18px;
+}
+.login-block__label {
+  font-weight: 300;
+  color: #777;
+}
+.login-block__input {
+    font-size: 14px;
+    font-weight: 300;
+    margin: 10px 0 0 0;
+    width: 530px;
+    padding: 10px 20px;
+    color: #777777;
+    background-color: #FAFAFA;
+    border: 1px solid #ced4da;
+    outline: none;
+    transition: .2s;
+}
+.text-danger {
+    margin-top: 4px;
+    display: block;
+    color: #777;
+}
+.login-block__input:focus {
+  border: 1px solid #c96;
+  transition: .2s;
+}
+.login-block__checkbox-block {
+  display: flex;
+  align-items: center;
+}
+.login-block__checkbox {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #666666;
+  transition: .3s;
+}
+.login-block__checkbox:hover {
+  transition: .3s;
+  color: #c96;
+}
+.login-block__inp--checkbox {
+  margin-right: 8px;
+  border-radius: 0;
+  cursor: pointer;
+}
+.login-block__desk-wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 15px;
+}
+.login-block__desk {
+  margin: 5px;
+  color: #777;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 14px;
+  cursor: pointer;
+  transition: .3s;
+}
+.login-block__desk:hover {
+  color: #c96;
+  transition: .3s;
+}
+.login-block__btn-login {
+  margin-right: 15px;
+  padding: 8px 35px;
+  font-size: 14px;
+  color: #c96;
+  border: 1px solid #c96;
+  background: none;
+  text-transform: uppercase;
+  transition: .3s;
+}
+.login-block__btn-login:hover {
+  background-color: #c96;
+  color: #fff;
+  transition: .3s;
+}
+.login-block__tips {
+  display: flex;
+}
+.login-block__tips a{
+  font-size: 12px;
+}

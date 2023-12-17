@@ -1,0 +1,56 @@
+﻿@model CartViewModel
+
+@{
+    ViewData["Title"] = "Cart";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/footer.css">
+    <link rel="stylesheet" href="~/css/pages/cart-page.css">
+}
+
+<section class="cart-header__wrapper">
+    <div class="cart-section container">
+        <p class="cart-section__title">Shopping Cart</p>
+        <a href="#!" class="cart-section__subtitle">Shop</a>
+    </div>
+</section>
+<section class="cart__wrapper">
+    <div class="cart-main container">
+        <ul class="cart__list">
+            <li class="cart__item">
+                <div class="cart__part-item">Product</div>
+                <div class="cart__part-item"></div>
+                <div class="cart__part-item">Price</div>
+                <div class="cart__part-item">Quantity</div>
+                <div class="cart__part-item">Total</div>
+                <div class="cart__part-item"></div>
+            </li>
+            @foreach (var line in Model.Cart.Lines)
+            {
+                <li class="cart__item cart__item--order" id="@line.Product.Id">
+                    <div class="cart__part-item"><img src="@line.Product.Picture"></div>
+                    <div class="cart__part-item">@line.Product.Name</div>
+                    <div class="cart__part-item"><span class="cart__part-item__price-span">@line.Product.Price</span>.00 rub</div>
+                    <div class="cart__part-item"><input type="number" min="1" max="10" value='@line.Quantity' class="cart__part-input"></div>
+                    <div class="cart__part-item cart__part-item--total-price"><span class="cart__part-item__total-price-span">@* @((line.Quantity * line.Product.Price)) *@ @line.Product.Price</span>.00 rub</div>
+                    <div class="cart__part-item cart__part-item--delete">X</div>
+                </li>
+            }
+            <li class="cart__item cart__item--end">
+                <p class="cart__item--end-text">Your cart is empty</p>
+            </li>
+        </ul>
+        <div class="cart-result">
+            <div class="cart-result__total">
+                <p class="cart-result__total-text">Total:</p>
+                <p class="cart-result__price"><span class="cart-result__total-price"></span>.00 rub</p>
+            </div>
+            <button class="cart-result__btn">PROCEED TO CHECKOUT</button>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    <script src="~/js/pages/cart-page.js"></script>
+}

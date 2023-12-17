@@ -1,0 +1,105 @@
+﻿@model CatalogViewModel
+
+@{
+    ViewData["Title"] = "Products";
+    Layout = "_AdminLayout";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/admin/products-page.css">
+}
+
+<main class="main">
+    <div class="main-container">
+        <div class="main__title-block">
+            <div class="main__title-block--wrapper">
+                <p class="main__title">Список товаров</p>
+                <div class="title-block__btns">
+                    <a href="/Admin/Product/Create" class="title-block__btn title-block__btn--add">Add</a>
+                    <button class="title-block__btn title-block__btn-remove">Remove</button>
+                    <button class="title-block__btn title-block__btn-restore">Restore</button>
+                    <button class="title-block__btn title-block__btn-delete">Delete</button>
+                </div>
+            </div>
+            <div class="title-block__search-block">
+                <a class="search-block__btn">Search</a>
+                <input type="text" name="searchArticul" id="searchArticul" class="search-block__inp" placeholder="Введите артикул">
+            </div>
+        </div>
+        <ul class="product__list">
+            <li class="product__item product__item--header">
+                <div class="product__info-block product__info-block--radio">
+                    <input type="checkbox" value="all" name="choiceProduct" id="all-prod">
+                </div>
+                <div class="product__info-block product__info-block--article">
+                    <p class="product__article">Артикул</p>
+                </div>
+                <div class="product__info-block product__info-block--photo">
+                    <p class="product__data-photo">Фото</p>
+                </div>
+                <div class="product__info-block product__info-block--name-product">
+                    <p class="product__name-product">Наименование</p>
+                </div>
+                <div class="product__info-block product__info-block--content-rating">
+                    <p class="product__content-rating">Цена</p>
+                </div>
+                <div class="product__info-block product__info-block--data-create">
+                    <p class="product__data-create">Кол-во</p>
+                </div>
+                <div class="product__info-block product__info-block--data-create">
+                    <p class="product__status">Статус</p>
+                </div>
+                <div class="product__info-block"></div>
+            </li>
+
+            <div class="product__list-wrapper">
+
+            @if (!Model.Products.Any())
+            {
+                <li class="product__item--null">Product list is empty</li>
+            }
+
+            @foreach (var product in Model.Products)
+            {
+                <li class="product__item">
+                    <div class="product__info-block product__info-block--radio">
+                        <input type="checkbox" class="product__radio" value="@product.Id" name="choiceProduct">
+                    </div>
+                    <div class="product__info-block product__info-block--article">
+                        <p class="product__article">@product.VendorCode</p>
+                    </div>
+                    <div class="product__info-block product__info-block--photo">
+                        <img src="@product.Picture" class="product__img">
+                    </div>
+                    <div class="product__info-block product__info-block--name-product">
+                        <a href="/Catalog/Product/@product.Id" class="product__name-product">@product.Name</a>
+                    </div>
+                    <div class="product__info-block product__info-block--content-rating">
+                        <p class="product__content-rating">@product.Price.ToString("#.00 руб.")</p>
+                    </div>
+                    <div class="product__info-block product__info-block--data-create">
+                        <p class="product__data-create">@product.QuantityInStock.ToString("# шт.")</p>
+                    </div>
+                    <div class="product__info-block product__info-block--data-create">
+                        @if (product.IsDeleted)
+                        {
+                            <p class="product__status--deleted">Удалён</p>
+                        }
+                        else
+                        {
+                            <p class="product__status--on-sale">В продаже</p>
+                        }
+                    </div>
+                    <div class="product__info-block product__info-block--rewrite">
+                        <a href="/Admin/Product/Edit/@product.Id" class="product__rewrite">Редактировать</a>
+                    </div>
+                </li>
+            }
+        </div>
+        </ul>
+    </div>
+</main>
+
+@section Scripts {
+    <script src="~/js/admin/products-page.js"></script>
+}

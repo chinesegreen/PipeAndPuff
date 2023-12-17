@@ -1,0 +1,47 @@
+﻿@page "/Account/Register"
+@* @model Microsoft.AspNetCore.Identity.UI.V5.Pages.Account.Internal.RegisterModel *@
+@model RegisterModel
+@{
+    ViewData["Title"] = "Register";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/pages/login-page.css" />
+}
+
+<div class="login__wrapper">
+    <div class="login-block container">
+        <div class="col-md-4">
+            <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post">
+                <h2 class="login-block__title">Create a new account.</h2>
+                <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+                <div class="login-block__input-block form-floating mb-3">
+                    <label class="login-block__label" asp-for="Input.Email">Email</label><br>
+                    <input asp-for="Input.Email" class="login-block__input form-control" autocomplete="username" aria-required="true" placeholder="name@example.com" />
+                    <span asp-validation-for="Input.Email" class="text-danger"></span>
+                </div>
+                <div class="login-block__input-block form-floating mb-3">
+                    <label class="login-block__label" asp-for="Input.Password">Password</label><br>
+                    <input asp-for="Input.Password" class="login-block__input form-control" autocomplete="new-password" aria-required="true" placeholder="password" />
+                    <span asp-validation-for="Input.Password" class="text-danger"></span>
+                </div>
+                <div class="login-block__input-block form-floating mb-3">
+                    <label class="login-block__label" asp-for="Input.ConfirmPassword">Confirm Password</label><br>
+                    <input asp-for="Input.ConfirmPassword" class="login-block__input form-control" autocomplete="new-password" aria-required="true" placeholder="password" /><br>
+                    <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
+                </div>
+                <div class="login-block__input-block login-block__checkbox-block checkbox mb-3">
+                    <button class="login-block__btn-login" id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-primary">Register</button>
+                    <label class="login-block__checkbox form-label">
+                        <input class="login-block__inp--checkbox form-check-input" type="checkbox" />
+                        I agree to the privacy policy *
+                    </label>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

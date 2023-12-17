@@ -1,0 +1,165 @@
+﻿body {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    max-width: 100%;
+}
+
+h1, h2, h3, h4, h5, h6, ul, ol, li, p {
+    margin: 0;
+    padding: 0;
+}
+
+ul, ol {
+    list-style: none;
+}
+
+a {
+    text-decoration: none;
+    color: black;
+}
+
+img {
+    max-width: 100%;
+    display: block;
+}
+
+.product__list {
+    margin-top: 50px;
+}
+
+.product__list-wrapper {
+    overflow-y: scroll;
+    height: 550px;
+}
+
+    .product__list-wrapper::-webkit-scrollbar {
+        width: 8px;
+    }
+
+    .product__list-wrapper::-webkit-scrollbar-thumb {
+        background-color: #929292;
+        border-radius: 25px;
+        border: 2px solid #fff;
+    }
+
+.title-block__btn-remove {
+    background: none;
+    border: 1px solid #216BFF;
+    color: #216BFF;
+}
+
+.title-block__search-block {
+    display: flex;
+    align-items: center;
+}
+
+.search-block__btn {
+    background-color: #216BFF;
+    color: #fff;
+    margin-right: 15px;
+    padding: 8px 15px;
+}
+
+.search-block__inp {
+    padding: 8px 15px;
+    width: 18%;
+    border-radius: 0;
+    border: none;
+    background: color;
+    font-size: 16px;
+    outline: none;
+}
+
+.title-block__btn-restore {
+    background: none;
+    border: 1px solid #216BFF;
+    color: #216BFF;
+}
+
+.title-block__btn-delete {
+    background: #ff0000;
+    border: 1px solid #ff0000;
+    color: #fff;
+}
+
+.title-block__btn--disable {
+    border: 1px solid #ccc;
+    color: #949494;
+    background: #cccccc;
+    pointer-events: none;
+    transition: .3s;
+}
+
+.product__item {
+    display: grid;
+    padding: 15px 5px;
+    grid-template-columns: repeat(8, 1fr);
+    border-bottom: 1px solid #ddd;
+}
+
+.product__item--header {
+    margin-right: 8px;
+}
+
+.product__info-block {
+    /* justify-self: center; */
+    align-self: center;
+}
+
+.product__status--deleted {
+    color: red;
+}
+
+.product__status--on-sale {
+    color: green;
+}
+
+.product__info-block--radio {
+}
+
+.product__radio {
+}
+
+.product__info-block--article {
+}
+
+.product__article {
+}
+
+.product__info-block--photo {
+}
+
+.product__img {
+    width: 50px;
+}
+
+.product__info-block--name-product {
+}
+
+.product__name-product {
+}
+
+.product__info-block--content-rating {
+}
+
+.product__content-rating {
+}
+
+.product__info-block--data-create {
+}
+
+.product__data-create {
+}
+
+.product__info-block--status {
+}
+
+.product__status {
+}
+
+.product__rewrite {
+    color: #216BFF;
+    font-weight: 700;
+    cursor: pointer;
+}

@@ -1,0 +1,45 @@
+﻿@{
+
+}
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData["Title"]</title>
+
+    <link rel="stylesheet" href="~/css/main.css">
+    <link rel="stylesheet" href="~/css/admin/main.css">
+    @RenderSection("Styles", false)
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+</head>
+<body>
+    <nav class="body-nav">
+        <ul class="body-nav__list">
+            <li class="body-nav__item">
+                <a href="#!" class="body-nav__link body-nav__link--active">Главная</a>
+            </li>
+            <li class="body-nav__item">
+                <a href="/Admin/Products" class="body-nav__link body-nav__link--active">Товары</a>
+            </li>
+            <li class="body-nav__item">
+                <a href="#!" class="body-nav__link">Заказы</a>
+            </li>
+            <li class="body-nav__item">
+                <a href="/" class="body-nav__link">Магазин</a>
+            </li>
+        </ul>
+    </nav>
+    @RenderBody()
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script src="http://code.jquery.com/ui/1.12.0/jquery-ui.min.js"></script>
+    @RenderSection("Scripts", false)
+</body>
+</html>
