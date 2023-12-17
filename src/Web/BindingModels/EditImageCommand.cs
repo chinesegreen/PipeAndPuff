@@ -1,4 +1,6 @@
-﻿namespace Web.BindingModels
+﻿using Microsoft.AspNetCore.Mvc;
+
+namespace Web.BindingModels
 {
     public class EditImageCommand
     {

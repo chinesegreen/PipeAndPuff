@@ -1,0 +1,68 @@
+﻿@using System.Security.Claims;
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+
+@{
+    ViewData["Title"] = "Account";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/pages/account-page.css">
+}
+
+@{
+    var user = await UserManager.GetUserAsync(User);
+    string surname = string.Empty;
+    string name = string.Empty;
+
+    if (user != null)
+    {
+        var claims = await SignInManager.UserManager.GetClaimsAsync(user);
+
+        if (claims != null && claims.Any())
+        {
+            foreach (var claim in claims)
+            {
+                if (claim.Type == ClaimTypes.Surname)
+                {
+                    surname = claim.Value;
+                }
+                else
+                if (claim.Type == ClaimTypes.Name)
+                {
+                    name = claim.Value;
+                }
+            }
+        }
+    }
+}
+
+<section class="account__wrapper">
+    <div class="account container">
+        <p class="account__title">@await UserManager.GetEmailAsync(user)</p>
+        <form class="form">
+            <p class="form__title">Main Information</p>
+            <ul class="form__list">
+                <li class="form__item">
+                    <label for="name" class="account__label">Name</label>
+                    <input value="@name" type="text" name="name" id="name" placeholder="Not specified" class="account__input">
+                </li>
+                <li class="form__item">
+                    <label for="surname" class="account__label">Surname</label>
+                    <input value="@surname" type="text" name="surname" id="surname" placeholder="Not specified" class="account__input">
+                </li>
+                <li class="form__item">
+                    <label for="number" class="account__label">Phone Number</label>
+                    <input value="@await UserManager.GetPhoneNumberAsync(user)" type="tel" name="number" id="number" placeholder="Not specified" class="account__input">
+                </li>
+            </ul>
+        </form>
+        <div class="btn">
+            <button class="btn__next">Save</button>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    <script src="~/js/pages/account.js"></script>
+}

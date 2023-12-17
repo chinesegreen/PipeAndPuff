@@ -1,5 +1,4 @@
 ﻿const body = document.querySelector('.body');
-const domain = "https://localhost:7214";
 
 $('.check-page__btn--accept').on('click', () => {
     let confirm = true;

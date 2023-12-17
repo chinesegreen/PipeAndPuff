@@ -1,0 +1,163 @@
+﻿@model ShowcaseViewModel
+
+@{
+    ViewData["Title"] = "Products";
+    Layout = "_AdminLayout";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/admin/showcase.css">
+    <link rel="stylesheet" href="/css/pages/account-page.css">
+}
+
+<section class="account__wrapper">
+    <div class="account container">
+        <p class="account__title">Rewrite main page</p>
+        <form id="form__showcase">
+            <p class="form__title">Showcase</p>
+            <p class="form__subtitle">Block one</p>
+            <ul class="form__list">
+                <li class="form__item">
+                    <label for="form__showcase-subtitle1" class="account__label">Subtitle</label>
+                    <input value="@Model.Template.Main.Subtitle" type="text" name="form__showcase-subtitle1" id="form__showcase-subtitle1" class="account__input" placeholder="Subtitle" data-type="subtitles">
+                </li>
+                <li class="form__item">
+                    <label for="form__showcase-title1" class="account__label">Title</label>
+                    <input value="@Model.Template.Main.Title" type="text" name="form__showcase-title1" id="form__showcase-title1" class="account__input" placeholder="Title" data-type="titles">
+                </li>
+                <li class="form__item">
+                    <label for="form__showcase-img1" class="account__label">Background Image</label>
+                    <input type="file" name="form__showcase-img1" id="form__showcase-img1" class="account__input" data-type="files">
+                </li>
+                <li class="form__item">
+                    <label for="form__showcase-link1" class="account__label">Link path</label>
+                    <input value="@Model.Template.Main.Link" type="text" name="form__showcase-link1" id="form__showcase-link1" class="account__input" placeholder="https://" data-type="links">
+                </li>
+            </ul>
+            <p class="form__subtitle">Block two</p>
+            <ul class="form__list">
+                <li class="form__item">
+                    <label for="form__showcase-subtitle2" class="account__label">Subtitle</label>
+                    <input value="@Model.Template.Mone.Subtitle" type="text" name="form__showcase-subtitle2" id="form__showcase-subtitle2" class="account__input" placeholder="Subtitle" data-type="subtitles">
+                </li>
+                <li class="form__item">
+                    <label for="form__showcase-title2" class="account__label">Title</label>
+                    <input value="@Model.Template.Mone.Title" type="text" name="form__showcase-title2" id="form__showcase-title2" class="account__input" placeholder="Title" data-type="titles">
+                </li>
+                <li class="form__item">
+                    <label for="form__showcase-img2" class="account__label">Background Image</label>
+                    <input type="file" name="form__showcase-img2" id="form__showcase-img2" class="account__input" data-type="files">
+                </li>
+                <li class="form__item">
+                    <label for="form__showcase-link2" class="account__label">Link path</label>
+                    <input value ="@Model.Template.Mone.Link" type="text" name="form__showcase-link2" id="form__showcase-link2" class="account__input" placeholder="https://" data-type="links">
+                </li>
+            </ul>
+            <p class="form__subtitle">Block three</p>
+            <ul class="form__list">
+                <li class="form__item">
+                    <label for="form__showcase-subtitle3" class="account__label">Subtitle</label>
+                    <input value="@Model.Template.Mtwo.Subtitle" type="text" name="form__showcase-subtitle3" id="form__showcase-subtitle3" class="account__input" placeholder="Subtitle" data-type="subtitles">
+                </li>
+                <li class="form__item">
+                    <label for="form__showcase-title3" class="account__label">Title</label>
+                    <input value ="@Model.Template.Mtwo.Title" type="text" name="form__showcase-title3" id="form__showcase-title3" class="account__input" placeholder="Title" data-type="titles">
+                </li>
+                <li class="form__item">
+                    <label for="form__showcase-img3" class="account__label">Background Image</label>
+                    <input type="file" name="form__showcase-img3" id="form__showcase-img3" class="account__input" data-type="files">
+                </li>
+                <li class="form__item">
+                    <label for="form__showcase-link3" class="account__label">Link path</label>
+                    <input value="@Model.Template.Mtwo.Link" type="text" name="form__showcase-link3" id="form__showcase-link3" class="account__input" placeholder="https://" data-type="links">
+                </li>
+            </ul>
+        </form>
+        <form id="form__category">
+            <p class="form__title" style="margin-top: 25px;">Categories</p>
+            <p class="form__subtitle">Block one</p>
+            <ul class="form__list">
+                <li class="form__item">
+                    <label for="form__category-subtitle1" class="account__label">Subtitle</label>
+                    <input value="@Model.Template.Sone.Subtitle" type="text" name="form__category-subtitle1" id="form__category-subtitle1" class="account__input" placeholder="Subtitle" data-type="subtitles">
+                </li>
+                <li class="form__item">
+                    <label for="form__category-title1" class="account__label">Title</label>
+                    <input value="@Model.Template.Sone.Title" type="text" name="form__category-title1" id="form__category-title1" class="account__input" placeholder="Title" data-type="titles">
+                </li>
+                <li class="form__item">
+                    <label for="form__category-img1" class="account__label">Background Image</label>
+                    <input type="file" name="form__category-img1" id="form__category-img1" class="account__input" data-type="files">
+                </li>
+                <li class="form__item">
+                    <label for="form__category-link1" class="account__label">Link path</label>
+                    <input value="@Model.Template.Sone.Link" type="text" name="form__category-link1" id="form__category-link1" class="account__input" placeholder="https://" data-type="links">
+                </li>
+            </ul>
+            <p class="form__subtitle">Block two</p>
+            <ul class="form__list">
+                <li class="form__item">
+                    <label for="form__category-subtitle2" class="account__label">Subtitle</label>
+                    <input value="@Model.Template.Stwo.Subtitle" type="text" name="form__category-subtitle2" id="form__category-subtitle2" class="account__input" placeholder="Subtitle" data-type="subtitles">
+                </li>
+                <li class="form__item">
+                    <label for="form__category-title2" class="account__label">Title</label>
+                    <input value="@Model.Template.Stwo.Title" type="text" name="form__category-title2" id="form__category-title2" class="account__input" placeholder="Title" placeholder="Title" data-type="titles">
+                </li>
+                <li class="form__item">
+                    <label for="form__category-img2" class="account__label">Background Image</label>
+                    <input type="file" name="form__category-img2" id="form__category-img2" class="account__input" data-type="files">
+                </li>
+                <li class="form__item">
+                    <label for="form__category-link2" class="account__label">Link path</label>
+                    <input value="@Model.Template.Stwo.Link" type="text" name="form__category-link2" id="form__category-link2" class="account__input" placeholder="https://" data-type="links">
+                </li>
+            </ul>
+            <p class="form__subtitle">Block three</p>
+            <ul class="form__list">
+                <li class="form__item">
+                    <label for="form__category-subtitle3" class="account__label">Subtitle</label>
+                    <input value="@Model.Template.Sthree.Subtitle" type="text" name="form__category-subtitle3" id="form__category-subtitle3" class="account__input" placeholder="Subtitle" data-type="subtitles">
+                </li>
+                <li class="form__item">
+                    <label for="form__category-title3" class="account__label">Title</label>
+                    <input value="@Model.Template.Sthree.Title" type="text" name="form__category-title3" id="form__category-title3" class="account__input" placeholder="Title" data-type="titles">
+                </li>
+                <li class="form__item">
+                    <label for="form__category-img3" class="account__label">Background Image</label>
+                    <input type="file" name="form__category-img3" id="form__category-img3" class="account__input" data-type="files">
+                </li>
+                <li class="form__item">
+                    <label for="form__category-link3" class="account__label">Link path</label>
+                    <input value="@Model.Template.Sthree.Link" type="text" name="form__category-link3" id="form__category-link3" class="account__input" placeholder="https://" data-type="links">
+                </li>
+            </ul>
+            <p class="form__subtitle">Block four</p>
+            <ul class="form__list">
+                <li class="form__item">
+                    <label for="form__category-subtitle4" class="account__label">Subtitle</label>
+                    <input value="@Model.Template.Sfour.Subtitle" type="text" name="form__category-subtitle4" id="form__category-subtitle4" class="account__input" placeholder="Subtitle" data-type="subtitles">
+                </li>
+                <li class="form__item">
+                    <label for="form__category-title4" class="account__label">Title</label>
+                    <input value="@Model.Template.Sfour.Title" type="text" name="form__category-title4" id="form__category-title4" class="account__input" placeholder="Title" data-type="titles">
+                </li>
+                <li class="form__item">
+                    <label for="form__category-img4" class="account__label">Background Image</label>
+                    <input type="file" name="form__category-img4" id="form__category-img4" class="account__input" data-type="files">
+                </li>
+                <li class="form__item">
+                    <label for="form__category-link4" class="account__label">Link path</label>
+                    <input value="@Model.Template.Sfour.Link" type="text" name="form__category-link4" id="form__category-link4" class="account__input" placeholder="https://" data-type="links">
+                </li>
+            </ul>
+
+        </form>
+        <div class="btn">
+            <button class="btn__next">Save</button>
+        </div>
+</section>
+
+@section Scripts {
+    <script src="~/js/admin/showcase.js"></script>
+}

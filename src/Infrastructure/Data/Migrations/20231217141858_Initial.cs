@@ -67,11 +67,41 @@ namespace Infrastructure.Data.Migrations
                     Weight = table.Column<int>(type: "integer", nullable: true),
                     Width = table.Column<int>(type: "integer", nullable: true),
                     Height = table.Column<int>(type: "integer", nullable: true),
-                    Lenght = table.Column<int>(type: "integer", nullable: true)
+                    Length = table.Column<int>(type: "integer", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Dimensions", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Manufacturers",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Name = table.Column<string>(type: "text", nullable: false),
+                    NormalizedName = table.Column<string>(type: "text", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Manufacturers", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ShowcaseBlocks",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Link = table.Column<string>(type: "text", nullable: true),
+                    Title = table.Column<string>(type: "text", nullable: true),
+                    Subtitle = table.Column<string>(type: "text", nullable: true),
+                    Image = table.Column<string>(type: "text", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ShowcaseBlocks", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -81,7 +111,7 @@ namespace Infrastructure.Data.Migrations
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     BuyerId = table.Column<string>(type: "text", nullable: false),
-                    OrderDate = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
+                    OrderDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     ShipToAddressId = table.Column<int>(type: "integer", nullable: false),
                     IsPaid = table.Column<bool>(type: "boolean", nullable: false),
                     IsShiped = table.Column<bool>(type: "boolean", nullable: false)
@@ -104,15 +134,14 @@ namespace Infrastructure.Data.Migrations
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Name = table.Column<string>(type: "text", nullable: false),
-                    Date = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
+                    Date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     NormalizedName = table.Column<string>(type: "text", nullable: false),
                     VendorCode = table.Column<string>(type: "text", nullable: false),
                     NormalizedVendorCode = table.Column<string>(type: "text", nullable: false),
                     Price = table.Column<int>(type: "integer", nullable: false),
                     PriceWithoutDiscount = table.Column<int>(type: "integer", nullable: true),
                     Description = table.Column<string>(type: "text", nullable: true),
-                    Subtitle = table.Column<string>(type: "text", nullable: true),
-                    Manufacturer = table.Column<string>(type: "text", nullable: true),
+                    ManufacturerId = table.Column<int>(type: "integer", nullable: true),
                     Picture = table.Column<string>(type: "text", nullable: false),
                     IsTrending = table.Column<bool>(type: "boolean", nullable: false),
                     IsDeleted = table.Column<bool>(type: "boolean", nullable: false),
@@ -127,6 +156,60 @@ namespace Infrastructure.Data.Migrations
                         name: "FK_Products_Dimensions_DimensionsId",
                         column: x => x.DimensionsId,
                         principalTable: "Dimensions",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Showcases",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    MainId = table.Column<int>(type: "integer", nullable: true),
+                    MoneId = table.Column<int>(type: "integer", nullable: true),
+                    MtwoId = table.Column<int>(type: "integer", nullable: true),
+                    SoneId = table.Column<int>(type: "integer", nullable: true),
+                    StwoId = table.Column<int>(type: "integer", nullable: true),
+                    SthreeId = table.Column<int>(type: "integer", nullable: true),
+                    SfourId = table.Column<int>(type: "integer", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Showcases", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Showcases_ShowcaseBlocks_MainId",
+                        column: x => x.MainId,
+                        principalTable: "ShowcaseBlocks",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Showcases_ShowcaseBlocks_MoneId",
+                        column: x => x.MoneId,
+                        principalTable: "ShowcaseBlocks",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Showcases_ShowcaseBlocks_MtwoId",
+                        column: x => x.MtwoId,
+                        principalTable: "ShowcaseBlocks",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Showcases_ShowcaseBlocks_SfourId",
+                        column: x => x.SfourId,
+                        principalTable: "ShowcaseBlocks",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Showcases_ShowcaseBlocks_SoneId",
+                        column: x => x.SoneId,
+                        principalTable: "ShowcaseBlocks",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Showcases_ShowcaseBlocks_SthreeId",
+                        column: x => x.SthreeId,
+                        principalTable: "ShowcaseBlocks",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Showcases_ShowcaseBlocks_StwoId",
+                        column: x => x.StwoId,
+                        principalTable: "ShowcaseBlocks",
                         principalColumn: "Id");
                 });
 
@@ -187,6 +270,7 @@ namespace Infrastructure.Data.Migrations
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Position = table.Column<int>(type: "integer", nullable: false),
                     ProductId = table.Column<int>(type: "integer", nullable: false),
                     Image = table.Column<string>(type: "text", nullable: false)
                 },
@@ -230,6 +314,41 @@ namespace Infrastructure.Data.Migrations
                 name: "IX_Products_DimensionsId",
                 table: "Products",
                 column: "DimensionsId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Showcases_MainId",
+                table: "Showcases",
+                column: "MainId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Showcases_MoneId",
+                table: "Showcases",
+                column: "MoneId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Showcases_MtwoId",
+                table: "Showcases",
+                column: "MtwoId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Showcases_SfourId",
+                table: "Showcases",
+                column: "SfourId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Showcases_SoneId",
+                table: "Showcases",
+                column: "SoneId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Showcases_SthreeId",
+                table: "Showcases",
+                column: "SthreeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Showcases_StwoId",
+                table: "Showcases",
+                column: "StwoId");
         }
 
         /// <inheritdoc />
@@ -242,7 +361,13 @@ namespace Infrastructure.Data.Migrations
                 name: "Images");
 
             migrationBuilder.DropTable(
+                name: "Manufacturers");
+
+            migrationBuilder.DropTable(
                 name: "OrderItem");
+
+            migrationBuilder.DropTable(
+                name: "Showcases");
 
             migrationBuilder.DropTable(
                 name: "Categories");
@@ -255,6 +380,9 @@ namespace Infrastructure.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "Orders");
+
+            migrationBuilder.DropTable(
+                name: "ShowcaseBlocks");
 
             migrationBuilder.DropTable(
                 name: "Dimensions");

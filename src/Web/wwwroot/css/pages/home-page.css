@@ -16,17 +16,14 @@
 
 .fast-buy__category--first {
     grid-area: first;
-    background-color: #a337a3;
 }
 
 .fast-buy__category--second {
     grid-area: third;
-    background-color: #5f4f3c;
 }
 
 .fast-buy__category--third {
     grid-area: second;
-    background-color: #4c661c;
 }
 
 
@@ -113,6 +110,9 @@
 
 .fast-buy__category {
     flex-direction: column;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
     display: flex;
     justify-content: center;
     position: relative;
@@ -252,7 +252,7 @@
     justify-content: center;
     align-items: center;
     transition: .3s;
-    padding: 25px 0;
+    padding: 25px 0 0 0;
     cursor: pointer;
 }
 
@@ -314,12 +314,10 @@
     cursor: pointer;
     text-align: center;
 }
-
-.trand-products__products-card:hover .products-card__btn {
+.trand-products__product:hover .product__btn {
     background-color: #c96;
     color: #fff;
 }
-
 
 .categories__wrapper {
 }
@@ -377,22 +375,18 @@
 
 .categories-grid__item:nth-child(1) {
     grid-area: big-one;
-    background-color: #22c538;
 }
 
 .categories-grid__item:nth-child(2) {
     grid-area: mini-one;
-    background-color: #c21fc2;
 }
 
 .categories-grid__item:nth-child(3) {
     grid-area: mini-two;
-    background-color: #b12a25;
 }
 
 .categories-grid__item:nth-child(4) {
     grid-area: big-two;
-    background-color: #2040cc;
 }
 
 .categories-grid__title {
@@ -631,3 +625,10 @@
         background-color: #c96;
         transition: .3s;
     }
+
+.product__btn--active {
+    /*border: 1px solid #ddd;*/
+    background-color: #ddd;
+    color: #fff;
+    transition: .3s;
+}

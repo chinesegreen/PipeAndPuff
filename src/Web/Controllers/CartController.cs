@@ -84,6 +84,19 @@ namespace Web.Controllers
             return Ok();
         }
 
+        public static Cart GetCart(HttpContext context)
+        {
+            Cart? cart = context.Session.Get<Cart>(SessionKey);
+
+            if (cart == null)
+            {
+                cart = new Cart();
+                context.Session.Set<Cart>(SessionKey, cart);
+            }
+
+            return cart;
+        }
+
         public Cart GetCart()
         {
             Cart? cart = HttpContext.Session.Get<Cart>(SessionKey);

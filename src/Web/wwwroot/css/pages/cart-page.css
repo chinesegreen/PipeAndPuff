@@ -98,11 +98,12 @@ img {
 
 .cart__item--end {
     display: none;
+    padding: 15px 0;
 }
 
 .cart__item--end-text {
     text-align: center;
-    color: #999999;
+    color: #999;
     font-weight: normal;
     font-size: 22px;
 }

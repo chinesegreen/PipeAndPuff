@@ -422,6 +422,19 @@ img {
     cursor: pointer;
 }
 
+.form__btn-send {
+    display: inline-block;
+    margin-top: 20px;
+    color: #fff;
+    background-color: #216BFF;
+    padding: 15px;
+    font-size: 18px;
+    border: none;
+    border-radius: 15px;
+    cursor: pointer;
+    margin: 10px;
+}
+
 .form__btn-preview {
     display: inline-block;
     margin-top: 25px;
@@ -466,6 +479,15 @@ img {
 }
 
 .form-list {
+}
+
+.form__input-quantity {
+    width: 10%;
+}
+
+.centered {
+    font-size: 20px;
+    margin-top: 20px;
 }
 
 .form-list__item {
@@ -548,4 +570,17 @@ img {
 }
 
 .message__link--no {
+}
+
+
+.remove-photo__plus--none {
+    display: none;
+}
+
+.flex {
+    display: flex;
+}
+
+.none {
+    display: none;
 }

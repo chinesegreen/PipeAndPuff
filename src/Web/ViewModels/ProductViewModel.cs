@@ -6,7 +6,7 @@ namespace Web.ViewModels
     public class ProductViewModel
     {
         public Product Product { get; set; }
-        public List<string>? Images { get; set; }
+        public string Manufacturer { get; set; }
 
         public List<string> GetCategories()
         {
@@ -18,10 +18,6 @@ namespace Web.ViewModels
                 {
                     categories.Add(category.Name);
                 }
-            }
-            else
-            {
-                categories.Add("No categories");
             }
 
             return categories;

@@ -1,0 +1,91 @@
+﻿body {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    max-width: 100%;
+    color: #333;
+}
+
+h1, h2, h3, h4, h5, h6, ul, ol, li, p {
+    margin: 0;
+    padding: 0;
+}
+
+ul, ol {
+    list-style: none;
+}
+
+a {
+    text-decoration: none;
+    color: black;
+}
+
+img {
+    max-width: 100%;
+    display: block;
+}
+
+.container {
+    max-width: 1300px;
+    margin: 0 auto;
+    box-sizing: border-box;
+}
+
+.main__title {
+    font-weight: 600;
+    font-size: 24px;
+}
+
+.form__block {
+    flex-direction: column;
+    display: flex;
+}
+
+.form__title {
+    margin-top: 15px;
+    margin-bottom: 5px;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.form__user {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 18px;
+    color: #333;
+    width: 50%;
+    padding: 5px 15px;
+    border: 1px solid #ccc;
+    font-weight: 500;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.form__create-account {
+    margin-top: 5px;
+    color: #0077ff;
+    font-weight: 600;
+    text-decoration: underline;
+}
+
+.map {
+    height: 500px;
+    border: 1px solid #c96;
+}
+
+.send {
+    border: 1px solid #c96;
+    color: #333;
+    padding: 4px 15px;
+    border-radius: 8px;
+    margin-top: 15px;
+    cursor: pointer;
+    transition: .3s;
+}
+
+    .send:hover {
+        background-color: #c96;
+        color: #fff;
+        border: 1px solid #c96;
+    }

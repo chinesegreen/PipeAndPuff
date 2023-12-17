@@ -69,7 +69,9 @@
                         <p class="product__article">@product.VendorCode</p>
                     </div>
                     <div class="product__info-block product__info-block--photo">
-                        <img src="@product.Picture" class="product__img">
+                        <a href="/Catalog/Product/@product.Id">
+                            <img src="@product.Picture" class="product__img">
+                        </a>
                     </div>
                     <div class="product__info-block product__info-block--name-product">
                         <a href="/Catalog/Product/@product.Id" class="product__name-product">@product.Name</a>
@@ -78,7 +80,17 @@
                         <p class="product__content-rating">@product.Price.ToString("#.00 руб.")</p>
                     </div>
                     <div class="product__info-block product__info-block--data-create">
-                        <p class="product__data-create">@product.QuantityInStock.ToString("# шт.")</p>
+                    @{
+                        if (product.QuantityInStock == 0)
+                        {
+                            <p class="product__data-create">Нет на складе</p>
+                        }
+                        else
+                        {
+                            <p class="product__data-create">@product.QuantityInStock.ToString("# шт.")</p>
+                        }
+                    }
+                           
                     </div>
                     <div class="product__info-block product__info-block--data-create">
                         @if (product.IsDeleted)
@@ -97,6 +109,21 @@
             }
         </div>
         </ul>
+    </div>
+    <div class="btns__next-page" style="margin: 0;">
+        <a class="next-page__btn next-page__btn--next" href="/Admin/Products/@Model.CalculatePrevious()"><</a>
+        @{
+            if (Model.CurrentPage != 1)
+            {
+                <a class="next-page__btn next-page__btn--next" href="/Admin/Products/1">1</a>
+            }
+            <a class="next-page__btn next-page__btn--next" style="background-color: #DDD" href="/Admin/Products/@Model.CurrentPage">@Model.CurrentPage</a>
+            if (Model.CurrentPage != Model.NumberOfPages)
+            {
+                <a class="next-page__btn next-page__btn--next" href="/Admin/Products/@Model.NumberOfPages">@Model.NumberOfPages</a>
+            }
+        }
+        <a class="next-page__btn next-page__btn--next" href="/Admin/Products/@Model.CalculateNext()">></a>
     </div>
 </main>
 

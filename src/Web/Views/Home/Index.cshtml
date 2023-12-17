@@ -1,4 +1,5 @@
-﻿@model IndexViewModel
+﻿@using Web.Controllers;
+@model IndexViewModel
 
 @{
     ViewData["Title"] = "Pipe & Puff";
@@ -10,31 +11,81 @@
 
 <div class="fast-buy__wrapper">
     <section class="fast-buy container">
-        <div class="fast-buy__category--first fast-buy__category-track">
-            <div class="category-track__btn--prev"></div>
-            <div class="category-track__btn--next"></div>
-            <div class="fast-buy__slider-wrapper">
+        <div class="fast-buy__category--first fast-buy__category" style="background-image: url('@Model.Template.Main.Image');"> 
+            <div class="fast-buy__shadow"></div>
+            <div class="fast-buy__slider-wrapper" style="padding: 50px;">
                 <div class="fast-buy__category fast-slider__inner">
-                    <p class="fast-buy__subtitle">Topsale Collection</p>
-                    <p class="fast-buy__title">Living Room<br>Furniture</p>
+                    @{
+                        if (Model.Template.Main.Subtitle != "")
+                        {
+                            <p class="fast-buy__subtitle">@Model.Template.Main.Subtitle</p>
+                        }
+                        else
+                        {
+                            <p class="fast-buy__subtitle">Subtitle</p>
+                        }
+
+                        if (Model.Template.Main.Title != "")
+                        {
+                            <p class="fast-buy__title">@Model.Template.Main.Title</p>
+                        }
+                        else
+                        {
+                            <p class="fast-buy__title">Title</p>
+                        }
+                    }
                     <button class="fast-buy__btn">Shop now</button>
                 </div>
             </div>
         </div>
 
-        <div class="fast-buy__category fast-buy__category--second">
+        <div class="fast-buy__category fast-buy__category--second" style="background-image: url('@Model.Template.Mone.Image');">
             <div class="fast-buy__shadow"></div>
             <div class="fast-buy__category--mini">
-                <p class="fast-buy__subtitle fast-buy__subtitle--mini">Topsale Collection</p>
-                <p class="fast-buy__title fast-buy__title--mini">Living Room<br>Furniture</p>
+                @{
+                    if (Model.Template.Mone.Subtitle != "")
+                    {
+                        <p class="fast-buy__subtitle fast-buy__subtitle--mini">@Model.Template.Mone.Subtitle</p>
+                    }
+                    else
+                    {
+                        <p class="fast-buy__subtitle fast-buy__subtitle--mini">Subtitle</p>
+                    }
+
+                    if (Model.Template.Mone.Title != "")
+                    {
+                        <p class="fast-buy__title fast-buy__title--mini">@Model.Template.Mone.Title</p>
+                    }
+                    else
+                    {
+                        <p class="fast-buy__title fast-buy__title--mini">Title</p>
+                    }
+                }
                 <button class="fast-buy__btn fast-buy__btn--mini">Shop now</button>
             </div>
         </div>
-        <div class="fast-buy__category fast-buy__category--third">
+        <div class="fast-buy__category fast-buy__category--third" style="background-image: url('@Model.Template.Mtwo.Image');">
             <div class="fast-buy__shadow"></div>
             <div class="fast-buy__category--mini">
-                <p class="fast-buy__subtitle fast-buy__subtitle--mini">Topsale Collection</p>
-                <p class="fast-buy__title fast-buy__title--mini">Living Room<br>Furniture</p>
+                @{
+                    if (Model.Template.Mtwo.Subtitle != "")
+                    {
+                        <p class="fast-buy__subtitle fast-buy__subtitle--mini">@Model.Template.Mtwo.Subtitle</p>
+                    }
+                    else
+                    {
+                        <p class="fast-buy__subtitle fast-buy__subtitle--mini">Title</p>
+                    }
+
+                    if (Model.Template.Mtwo.Title != "")
+                    {
+                        <p class="fast-buy__title fast-buy__title--mini">@Model.Template.Mtwo.Title</p>
+                    }
+                    else
+                    {
+                        <p class="fast-buy__title fast-buy__title--mini">Title</p>
+                    }
+                }
                 <button class="fast-buy__btn fast-buy__btn--mini">Shop now</button>
             </div>
         </div>
@@ -56,9 +107,29 @@
                     <a href="/Catalog/Product/@Model.Trendings[i].Id" class="product__img-wrapper" id="@Model.Trendings[i].Id">
                         <img src="@Model.Trendings[i].Picture" class="product__img" id="@Model.Trendings[i].Id">
                     </a>
+                    <p class="product__subtitle">@Model.Trendings[i].VendorCode</p>
                     <p class="product__title">@Model.Trendings[i].Name</p>
                     <p class="product__price"><span class="product__price-span">@Model.Trendings[i].Price.ToString("# rub")</span></p>
-                    <a class="product__btn" id="@Model.Trendings[i].Id">Add to cart</a>
+                    @{
+                        bool added = false;
+
+                        foreach (var line in CartController.GetCart(Context).Lines)
+                        {
+                            if (line.Product.Id == Model.Trendings[i].Id)
+                            {
+                                added = true;
+                            }
+                        }
+
+                        @if (added)
+                        {
+                            <a class="product__btn product__btn--active" id="@Model.Trendings[i].Id">TO CART</a>
+                        }
+                        else
+                        {
+                            <a class="product__btn" id="@Model.Trendings[i].Id">Add to cart</a>
+                        }
+                    }
                 </li>
             }
             <!-- (до сюда) -->
@@ -69,24 +140,60 @@
     <div class="categories-block container">
         <p class="categories-block__title">Shop by Categories</p>
         <div class="categories-block__categories-grid">
-            <div class="categories-grid__item">
+            <div class="categories-grid__item" style="background-image: url('@Model.Template.Sone.Image');">
                 <div class="categories-grid__item-shadow"></div>
-                <p class="categories-grid__title">Outdoor</p>
+                @{
+                    if (Model.Template.Sone.Title != "")
+                    {
+                        <p class="categories-grid__title">@Model.Template.Sone.Title </p>
+                    }
+                    else
+                    {
+                        <p class="categories-grid__title">Title</p>
+                    }
+                }
                 <a href="#!" class="categories-grid__btn">Shop now</a>
             </div>
-            <div class="categories-grid__item">
+            <div class="categories-grid__item" style="background-image: url('@Model.Template.Stwo.Image');">
                 <div class="categories-grid__item-shadow"></div>
-                <p class="categories-grid__title">Furniture and Design</p>
+                @{
+                if (Model.Template.Stwo.Title != "")
+                {
+                <p class="categories-grid__title">@Model.Template.Stwo.Title </p>
+                }
+                else
+                {
+                <p class="categories-grid__title">Title</p>
+                }
+                }
                 <a href="#!" class="categories-grid__btn">Shop now</a>
             </div>
-            <div class="categories-grid__item">
+            <div class="categories-grid__item" style="background-image: url('@Model.Template.Sthree.Image');">
                 <div class="categories-grid__item-shadow"></div>
-                <p class="categories-grid__title">Kitchen & Utensil</p>
+                @{
+                if (Model.Template.Sthree.Title != "")
+                {
+                <p class="categories-grid__title">@Model.Template.Sthree.Title </p>
+                }
+                else
+                {
+                <p class="categories-grid__title">Title</p>
+                }
+                }
                 <a href="#!" class="categories-grid__btn">Shop now</a>
             </div>
-            <div class="categories-grid__item">
+            <div class="categories-grid__item" style="background-image: url('@Model.Template.Sfour.Image');">
                 <div class="categories-grid__item-shadow"></div>
-                <p class="categories-grid__title">Lighting</p>
+                @{
+                if (Model.Template.Sfour.Title != "")
+                {
+                <p class="categories-grid__title">@Model.Template.Sfour.Title </p>
+                }
+                else
+                {
+                <p class="categories-grid__title">Title</p>
+                }
+                }
                 <a href="#!" class="categories-grid__btn">Shop now</a>
             </div>
         </div>
@@ -108,9 +215,29 @@
                     <a href="/Catalog/Product/@Model.RecentArrivals[i].Id" class="product__img-wrapper" id="@Model.RecentArrivals[i].Id">
                         <img src="@Model.RecentArrivals[i].Picture" class="products-card__img">
                     </a>
+                    <p class="product__subtitle">@Model.RecentArrivals[i].VendorCode</p>
                     <p class="product__title">@Model.RecentArrivals[i].Name</p>
                     <p class="product__price">@Model.RecentArrivals[i].Price.ToString("# rub")</p>
-                    <a class="product__btn" id="@Model.RecentArrivals[i].Id">Add to cart</a>
+                    @{
+                        bool added = false;
+
+                        foreach (var line in CartController.GetCart(Context).Lines)
+                        {
+                            if (line.Product.Id == Model.RecentArrivals[i].Id)
+                            {
+                                added = true;
+                            }
+                        }
+
+                        @if (added)
+                        {
+                            <a class="product__btn product__btn--active" id="@Model.RecentArrivals[i].Id">TO CART</a>
+                        }
+                        else
+                        {
+                            <a class="product__btn" id="@Model.RecentArrivals[i].Id">Add to cart</a>
+                        }
+                    }
                 </li>
             }
             <!-- (до сюда) -->

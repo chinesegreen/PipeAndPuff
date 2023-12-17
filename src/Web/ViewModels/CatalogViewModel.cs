@@ -10,21 +10,19 @@ namespace Web.ViewModels
     {
         public List<Product> Products { get; set; }
         public decimal TotalAmount { get; set; }
+        public List<string> Brands { get; set; }
+        public List<string> Categories { get; set; }
 
-        public int NumberOfPages
+        public List<string> GetCategories()
         {
-            get
-            {
-                return Products.Count / 32 + 1;
-            }
-            private set
-            {
-                if (value < 1)
-                    throw new ArgumentOutOfRangeException(nameof(value));
-
-                NumberOfPages = value;
-            }
+            return Categories.GroupBy(x => x).Select(x => x.First()).ToList();
         }
+        public List<string> GetBrands()
+        {
+            return Brands.GroupBy(x => x).Select(x => x.First()).ToList();
+        }
+
+        public int NumberOfPages { get; set; }
 
         public int CurrentPage { get; set; }
 

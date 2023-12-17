@@ -1,5 +1,5 @@
 ﻿@{
-
+    
 }
 
 <!DOCTYPE html>
@@ -21,21 +21,22 @@
     <nav class="body-nav">
         <ul class="body-nav__list">
             <li class="body-nav__item">
-                <a href="#!" class="body-nav__link body-nav__link--active">Главная</a>
+                <a href="/Admin/Products" class="body-nav__link">Товары</a>
             </li>
             <li class="body-nav__item">
-                <a href="/Admin/Products" class="body-nav__link body-nav__link--active">Товары</a>
-            </li>
-            <li class="body-nav__item">
-                <a href="#!" class="body-nav__link">Заказы</a>
+                <a href="/Admin/Orders" class="body-nav__link">Заказы</a>
             </li>
             <li class="body-nav__item">
                 <a href="/" class="body-nav__link">Магазин</a>
+            </li>
+            <li class="body-nav__item">
+                <a href="/Admin/Showcase" class="body-nav__link">Редактор витрин</a>
             </li>
         </ul>
     </nav>
     @RenderBody()
 
+    <script src="~/js/domain.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
     <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>

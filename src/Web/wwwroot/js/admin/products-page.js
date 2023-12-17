@@ -14,13 +14,13 @@ if ($this.hasClass('chk-all')) {
 
 $('.search-block__btn').on('click', () => {
     if ($('.search-block__inp').val()) {
-        $('.search-block__btn').attr('href', `https://localhost:7214/Admin/Search/${$('.search-block__inp').val()}`)
+        $('.search-block__btn').attr('href', `${domain}/Admin/Search/${$('.search-block__inp').val()}`)
     }
 })
 
 $('.search-block__inp').keydown(function (e) {
     if (e.keyCode === 13) {
-        window.location.href = `https://localhost:7214/Admin/Search/${$(e.currentTarget).val()}`
+        window.location.href = `${domain}/Admin/Search/${$(e.currentTarget).val()}`
     }
 })
 
@@ -90,7 +90,7 @@ let sendIds = (url) => {
 
         xhr.addEventListener("readystatechange", function () {
             if (this.readyState === 4) {
-                location.href = /*xhr.getResponseHeader("Location")*/ "https://localhost:7214/Admin/Products";
+                location.href = /*xhr.getResponseHeader("Location")*/ `${domain}/Admin/Products`;
             }
         });
         
@@ -105,11 +105,11 @@ let sendIds = (url) => {
 }
 
 $('.title-block__btn-restore').on('click', () => {
-    sendIds("https://localhost:7214/Admin/Restore");
+    sendIds(`${domain}/Admin/Restore`);
 })
 $('.title-block__btn-delete').on('click', () => {
-    sendIds("https://localhost:7214/Admin/Delete");
+    sendIds(`${domain}/Admin/Delete`);
 })
 $('.title-block__btn-remove').on('click', () => {
-    sendIds("https://localhost:7214/Admin/Remove");
+    sendIds(`${domain}/Admin/Remove`);
 })

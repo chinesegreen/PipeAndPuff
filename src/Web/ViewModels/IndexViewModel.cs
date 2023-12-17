@@ -1,4 +1,5 @@
 ﻿using Core.Entities;
+using Core.Entities.ShowcaseAggregate;
 using Web.Configuration;
 
 namespace Web.ViewModels
@@ -7,5 +8,6 @@ namespace Web.ViewModels
     {
         public List<Product> Trendings { get; set; }
         public List<Product> RecentArrivals { get; set; }
+        public ShowcaseTemplate Template { get; set; }
     }
 }

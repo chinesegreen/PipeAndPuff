@@ -1,9 +1,15 @@
 let checkTotalPrice = () => {
     let totalPrice = 0
-    $('.cart__part-item__total-price-span').each((ind, i) => {
-        totalPrice += +$(i).text()
-        $('.cart-result__total-price').text(totalPrice)
-    });
+if (!$('.cart__part-item__total-price-span').length) {
+$('.cart__item--end').css('display', 'block')
+$('.cart-result__total-price').text(totalPrice)
+} else {
+$('.cart__part-item__total-price-span').each((ind, i) => {
+totalPrice += +$(i).text()
+$('.cart-result__total-price').text(totalPrice)
+$('.cart__item--end').css('display', 'none')
+});
+}
 }
 checkTotalPrice()
 $('.cart__part-input').on('change', (e) => {
@@ -13,8 +19,11 @@ $('.cart__part-input').on('change', (e) => {
     $($('.cart__part-item__total-price-span')[index]).text(miniPrice * +$(e.currentTarget).val())
     checkTotalPrice()
 })
-
-let domain = "https://localhost:7214";
+$('input[type="number"]').on('input', (e)=>{
+if ($(e.currentTarget).val() < 1) {
+$(e.currentTarget).val(1)
+}
+})
 
 let deleteOrder = (ind) => {
     let id = $($('.cart__item--order')[ind]).prop('id')
@@ -72,3 +81,33 @@ $('.cart__part-input').each((ind, i) => {
     $($('.cart__part-item__total-price-span')[ind]).text(miniPrice * +$(i).val())
     checkTotalPrice()
 })
+
+$('.cart__part-item--delete').on('click', (e)=>{
+    $('.count-cart').text(+$('.count-cart').text() - 1);
+})
+
+let checkCart = ()=>{
+    let cartData = new Object
+    $('.cart__item--order').each((ind, i)=>{
+    cartData[$(i).attr('id')] = +$(i).find('.cart__part-input').val()
+    })
+    return cartData
+}
+
+let order = (e) => {
+    var xhr = new XMLHttpRequest();
+    xhr.withCredentials = true;
+
+    let obj = {
+        Data: checkCart()
+    }
+
+    xhr.addEventListener("load", () => document.write(xhr.response));
+
+    xhr.open("POST", `${domain}/Order/Create`);
+
+    xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+    xhr.send(JSON.stringify(obj));
+}
+
+$('.cart-result__btn').on('click', order)

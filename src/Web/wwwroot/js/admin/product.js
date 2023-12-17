@@ -1,7 +1,7 @@
 window.addEventListener('load', (e) => {
     e.preventDefault();
 });
-const requestUrl = 'https://localhost:7214/Admin/Product/Create'
+const requestUrl = `${domain}/Admin/Product/Create`
 $('.main-nav__link').each((indLink, iLink) => {
     $(iLink).on('click', (e) => {
         $('.form__view').each((indSection, iSection) => {
@@ -66,12 +66,10 @@ $('.form__input--select').keydown(function (e) {
     if (e.keyCode === 13) {
         if ($(`.form__input--select`).val() !== '') {
             categoriesArr.push(`${$(`.form__input--select`).val()}`)
-
             let newItem = document.createElement('li')
             $(newItem).addClass('categories__item')
             $(newItem).append(categoriesArr[categoriesArr.length - 1])
             $('.categories__list').append(newItem)
-            categoriesArr.push(`${$(`.form__input--select`).val()}`)
         }
         $('.categories__item').on('click', deleteCategories)
         $('.form__input--select').val('')
@@ -150,3 +148,9 @@ $('.categories__list').append(newItem)
 $('.categories__item').on('click', deleteCategories)
 $('.form__input--select').val('')
 })
+$('.categories__item').each((ind, i)=>{
+  categoriesArr.push($(i).text())
+})
+$('.categories__item').on('click', deleteCategories)
+
+let imageUrl = '/img/image.png'

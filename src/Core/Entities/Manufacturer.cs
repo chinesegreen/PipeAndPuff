@@ -10,5 +10,7 @@ namespace Core.Entities
     {
         public string Name { get; set; }
         public string NormalizedName { get; set; }
+
+        List<Product>? Products { get; set; }
     }
 }

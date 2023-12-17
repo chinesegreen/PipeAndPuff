@@ -1,14 +1,15 @@
 ﻿using Core.Entities;
 using Infrastructure.Data;
 using Infrastructure.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace Web.Controllers
 {
-    //[Authorize("Admin")]
+    [Authorize("Admin")]
     //[ValidateAntiForgeryToken]
-    //[Route("Admin/[Controller]/[Action]")]
     public class BaseAdminController : BaseController
     {
         protected readonly CatalogContext _context;
@@ -27,21 +28,40 @@ namespace Web.Controllers
                 return null;
             }
 
-            var manufacturer = await _context.Manufacturers
-                    .Where(m => m.NormalizedName == name).FirstAsync();
-
-            if (manufacturer == null)
+            try
             {
-                manufacturer = new Manufacturer()
+                var manufacturer = await _context.Manufacturers
+                    .Where(m => m.NormalizedName == name.ToUpper()).FirstAsync();
+
+                if (manufacturer == null)
+                {
+                    manufacturer = new Manufacturer()
+                    {
+                        Name = name,
+                        NormalizedName = name.ToUpper()
+                    };
+
+                    _context.Add(manufacturer);
+                }
+
+                await _context.SaveChangesAsync();
+
+                return manufacturer.Id;
+            }
+            catch (Exception e)
+            {
+                var manufacturer = new Manufacturer()
                 {
                     Name = name,
                     NormalizedName = name.ToUpper()
                 };
 
-                _context.Add(manufacturer);
-            }
+                 _context.Add(manufacturer);
 
-            return manufacturer.Id;
+                await _context.SaveChangesAsync();
+
+                return manufacturer.Id;
+            }
         }
     }
 }

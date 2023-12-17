@@ -1,7 +1,9 @@
-﻿using Core.Entities;
+﻿using Amazon.S3.Model.Internal.MarshallTransformations;
+using Core.Entities;
 using Infrastructure.Data;
 using Infrastructure.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.CodeAnalysis.Elfie.Diagnostics;
 using Microsoft.EntityFrameworkCore;
 using Web.BindingModels;
 using Web.ViewModels;
@@ -21,6 +23,28 @@ namespace Web.Controllers
         }
 
         [HttpPost]
+        public async Task<IActionResult> SetQuantity([FromBody] SetQuantityCommand cmd)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+
+            var product = await _context.Products
+                .Where(p => p.Id == cmd.Id)
+                .FirstOrDefaultAsync();
+
+            if (product != null)
+                product.SetQuantity(cmd.Quantity);
+            else
+                return BadRequest();
+
+            await _context.SaveChangesAsync();
+
+            return Ok();
+        }
+
+        [HttpPost]
         public async Task<IActionResult> Create([FromForm] CreateProductCommand cmd)
         {
             if (!ModelState.IsValid)
@@ -33,6 +57,7 @@ namespace Web.Controllers
                 Name = cmd.Name,
                 NormalizedName = cmd.Name.ToUpper(),
                 Price = cmd.Price,
+                PriceWithoutDiscount = cmd.PriceWithoutDiscount,
                 Description = cmd.Description,
                 ManufacturerId = await AddManufacturer(cmd.Manufacturer),
                 VendorCode = cmd.VendorCode,
@@ -48,13 +73,17 @@ namespace Web.Controllers
                     Weight = cmd.Weight
                 },
                 Picture = await _storage.SaveFile(cmd.Picture, "products"),
-                Categories = (cmd.GetCategories() ?? new List<string>() { "Empty" })
+            };
+
+            if (cmd.Categories != null && cmd.Categories.Any())
+            {
+                product.Categories = GetCategories(cmd.Categories)
                     .Select(c => new Category()
                     {
                         Name = c,
                         NormalizedName = c.ToUpper()
-                    }).ToList()
-            };
+                    }).ToList();
+            }
 
             if (cmd.Images != null && cmd.Images.Any())
             {
@@ -83,35 +112,36 @@ namespace Web.Controllers
             return Redirect("/Admin/Products");
         }
 
-        [HttpGet]
-        [Route("[Action]/{productId}")]
+        [HttpGet("{productId}")]
         public async Task<IActionResult> Edit(int productId)
         {
             var product = await _context.Products
                 .Where(p => p.Id == productId)
-                .Include("Categories").FirstOrDefaultAsync();
+                .Include(p => p.Categories)
+                .Include(p => p.Images)
+                .Include(p => p.Dimensions)
+                .FirstOrDefaultAsync();
 
             if (product == null)
             {
                 throw new ArgumentOutOfRangeException();
             }
 
-            product.Images = await _context.Images
-                    .Where(i => i.ProductId == product.Id).ToListAsync();
-
-            product.Dimensions = await _context.Dimensions
-                .Where(d => d.Id == productId).FirstOrDefaultAsync();
-
             var model = new ProductViewModel()
             {
                 Product = product
             };
 
+            var manufacturer = await _context.Manufacturers.Where(m => product.ManufacturerId == m.Id).FirstOrDefaultAsync();
+            if (manufacturer == null)
+                model.Manufacturer = "Empty";
+            else
+                model.Manufacturer = manufacturer.Name;
+
             return View(model);
         }
 
         [HttpPost]
-        [Route("[Action]")]
         public async Task<IActionResult> Edit([FromForm] EditProductCommand cmd)
         {
             if (!ModelState.IsValid)
@@ -120,15 +150,15 @@ namespace Web.Controllers
             }
 
             var product = _context.Products.Where(p => p.Id == cmd.Id)
-                    .FirstOrDefault();
+                .Include(p => p.Categories)    
+                .FirstOrDefault();
 
             if (product != null)
             {
-                product.SetQuantity(cmd.QuantityInStock);
-
                 product.Name = cmd.Name;
                 product.NormalizedName = cmd.Name.ToUpper();
                 product.Price = cmd.Price;
+                product.PriceWithoutDiscount = cmd.PriceWithoutDiscount;
                 product.Description = cmd.Description;
                 product.ManufacturerId = await AddManufacturer(cmd.Manufacturer);
                 product.VendorCode = cmd.VendorCode;
@@ -142,12 +172,25 @@ namespace Web.Controllers
                     Length = cmd.Length,
                     Weight = cmd.Weight
                 };
-                product.Categories = (cmd.GetCategories() ?? new List<string>() { "Empty" })
-                    .Select(c => new Category()
+                if (cmd.Categories != null && cmd.Categories.Any())
+                {
+                    if (product.Categories != null)
                     {
-                        Name = c,
-                        NormalizedName = c.ToUpper()
-                    }).ToList();
+                        foreach (var cat in product.Categories)
+                        {
+                            _context.Remove(cat);
+                        }
+                    }
+
+                    await _context.SaveChangesAsync();
+
+                    product.Categories = GetCategories(cmd.Categories)
+                        .Select(c => new Category()
+                        {
+                            Name = c,
+                            NormalizedName = c.ToUpper()
+                        }).ToList();
+                }
             }
             else
             {
@@ -160,7 +203,7 @@ namespace Web.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> EditImage([FromBody] EditImageCommand cmd)
+        public async Task<IActionResult> EditImage([FromForm] EditImageCommand cmd)
         {
             var product = _context.Products.Where(p => p.Id == cmd.Id)
                     .FirstOrDefault();
@@ -190,7 +233,114 @@ namespace Web.Controllers
 
             await _context.SaveChangesAsync();
 
-            return Redirect("/Admin/Products");
+            return Ok();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> DeleteImage([FromForm] DeleteImageCommand cmd)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+
+            var product = await _context.Products.Where(p => p.Id == cmd.Id).FirstAsync();
+
+            if (product != null)
+            {
+                if (cmd.Position == 0)
+                {
+                    return BadRequest();
+                }
+                else
+                {
+                    var image = await _context.Images
+                        .Where(i => i.ProductId == cmd.Id && i.Position == cmd.Position)
+                        .FirstOrDefaultAsync();
+
+                    if (image != null)
+                    {
+                        _context.Remove(image);
+
+                        var images = await _context.Images
+                            .Where(i => i.ProductId == cmd.Id && i.Position > cmd.Position)
+                            .ToListAsync();
+
+                        if (images != null && images.Any())
+                        {
+                            foreach (var img in images)
+                            {
+                                img.Position -= 1;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        return BadRequest();
+                    }
+                }
+            }
+            else
+            {
+                return NotFound();
+            }
+
+            await _context.SaveChangesAsync();
+
+            return Ok();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddImage([FromForm] AddImageCommand cmd)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+
+            var image = new ImageObj()
+            {
+                Image = await _storage.SaveFile(cmd.Image, "products"),
+                ProductId = cmd.Id
+            };
+
+            var images = await _context.Images
+            .Where(i => i.ProductId == cmd.Id)
+            .ToListAsync();
+
+            var positions = images.Select(i => i.Position).ToList();
+            positions.Sort();
+            
+            for (int i = 1; i <= positions.Count; i++)
+            {
+                if (i != positions[i-1])
+                {
+                    image.Position = i;
+                    return Ok();
+                }
+            }
+
+            if (positions.Any())
+            {
+                image.Position = positions.Last() + 1;
+            }
+            else
+            {
+                image.Position =  + 1;
+            }
+
+            _context.Add(image);
+
+            await _context.SaveChangesAsync();
+
+            return Ok();
+        }
+
+        public List<string>? GetCategories(List<string>? categories)
+        {
+            if (categories == null) return null;
+
+            return categories.GroupBy(x => x).Select(x => x.First()).ToList();
         }
     }
 }

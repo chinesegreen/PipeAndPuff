@@ -46,11 +46,6 @@ img {
     margin-right: 45px;
 }
 
-    .body-nav__item:nth-child(1) a {
-        color: #dddddd;
-        pointer-events: none;
-    }
-
 .body-nav__link {
     margin: 8px 0;
     color: #333;

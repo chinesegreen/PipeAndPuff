@@ -1,10 +1,12 @@
-﻿@model CatalogViewModel
+﻿@using Web.Controllers;
+@model CatalogViewModel
 
 @{
     ViewData["Title"] = "Catalog";
 }
 
 @section Styles {
+    <script src='https://cdn.tailwindcss.com'></script>
     <link rel="stylesheet" href="~/css/pages/catalog.css">
 }
 
@@ -20,48 +22,43 @@
             <div class="catalog__filters">
                 <div class="catalog__filters-header">
                     <p class="filters-header__title">Filters:</p>
-                    <a href="catalog.html" class="filters-header__clear">Clear All</a>
+                    <a class="filters-header__clear">Clear All</a>
                 </div>
                 <ul class="filters__list">
                     <li class="filters__item">
                         <p class="filters__item-title">Category</p>
                         <div class="filters__item-child">
-                            <label for="NameCategory1" class="filters__item-label"><input type="checkbox" name="category" id="NameCategory1">Dresses</label>
-                            <label for="NameCategory2" class="filters__item-label"><input type="checkbox" name="category" id="NameCategory2">Dresses</label>
-                            <label for="NameCategory3" class="filters__item-label"><input type="checkbox" name="category" id="NameCategory3">Dresses</label>
-                            <label for="NameCategory4" class="filters__item-label"><input type="checkbox" name="category" id="NameCategory4">Dresses</label>
-                            <label for="NameCategory5" class="filters__item-label"><input type="checkbox" name="category" id="NameCategory5">Dresses</label>
+                            <input type="text" placeholder="Search Category" class="outline-none mt-1 mb-2 search-category">
+                            @if (Model.Categories != null && Model.Categories.Any())
+                            {
+                                foreach (var category in Model.GetCategories())
+                                {
+                                    <label for="@category" class="filters__item-label filters__item--category"><input type="checkbox" name="category" id="@category" class="mr-2" value="@category">@category</label>
+                                }
+                            }
                         </div>
                     </li>
                     <li class="filters__item">
-                        <p class="filters__item-title">Size</p>
-                        <div class="filters__item-child">
-                            <label for="size1" class="filters__item-label"><input type="checkbox" name="category" id="size1">XS</label>
-                            <label for="size2" class="filters__item-label"><input type="checkbox" name="category" id="size2">S</label>
-                            <label for="size3" class="filters__item-label"><input type="checkbox" name="category" id="size3">M</label>
-                            <label for="size4" class="filters__item-label"><input type="checkbox" name="category" id="size4">L</label>
-                            <label for="size5" class="filters__item-label"><input type="checkbox" name="category" id="size5">XL</label>
-                            <label for="size6" class="filters__item-label"><input type="checkbox" name="category" id="size6">XXL</label>
+                        <p class="filters__item-title">Price</p>
+                        <div class="filters__item-child flex flex-row">
+                            <input type="number" class="w-1/2 outline-none mr-2 filters__item--price" placeholder="From" id="priceFrom">
+                            <input type="number" class="w-1/2 outline-none filters__item--price" placeholder="To" id="priceTo">
                         </div>
                     </li>
                     <li class="filters__item">
                         <p class="filters__item-title">Brand</p>
                         <div class="filters__item-child">
-                            <label for="brand1" class="filters__item-label"><input type="checkbox" name="category" id="brand1">BMW</label>
-                            <label for="brand2" class="filters__item-label"><input type="checkbox" name="category" id="brand2">Porsche</label>
-                            <label for="brand3" class="filters__item-label"><input type="checkbox" name="category" id="brand3">Mercedes</label>
-                            <label for="brand4" class="filters__item-label"><input type="checkbox" name="category" id="brand4">Bugatti</label>
-                            <label for="brand5" class="filters__item-label"><input type="checkbox" name="category" id="brand5">Marussia</label>
+                            <input type="text" placeholder="Search Brands" class="outline-none mt-1 mb-2 search-brand">
+                            @if (Model.Brands != null && Model.Brands.Any())
+                            {
+                                foreach (var brand in Model.GetBrands())
+                                {
+                                    <label for="@brand" class="filters__item-label filters__item--manufacture"><input type="checkbox" name="@brand" id="@brand" class="mr-2" value="@brand">@brand</label>
+                                }
+                            }
                         </div>
                     </li>
-                    <!-- <li class="filters__item">
-                      <p class="filters__item-title">Price</p>
-                      <div class="filters__item-child">
-                        <span class="rangeValues"></span>
-                        <input value="500" min="500" max="50000" step="500" type="range">
-                        <input value="50000" min="500" max="50000" step="500" type="range">
-                      </div>
-                    </li> -->
+                    <button class="search">Search</button>
                 </ul>
             </div>
             <div class="catalog__shop">
@@ -86,9 +83,29 @@
                                         <img src="@product.Picture" class="product__img">
                                     </a>
                                 </div>
+                                <p class="product__subtitle">@product.VendorCode</p>
                                 <p class="product__title">@product.Name</p>
                                 <p class="product__price"><span class="product__price-span">@product.Price.ToString("# rub")</span></p>
-                                <a class="product__btn" href="/Cart/AddToCart/@product.Id" id="@product.Id">Add to cart</a>
+                                @{
+                                    bool added = false;
+
+                                    foreach (var line in CartController.GetCart(Context).Lines)
+                                    {
+                                        if (line.Product.Id == product.Id)
+                                        {
+                                            added = true;
+                                        }
+                                    }
+
+                                    @if (added)
+                                    {
+                                        <a class="product__btn product__btn--active" id="@product.Id">TO CART</a>
+                                    }
+                                    else
+                                    {
+                                        <a class="product__btn" id="@product.Id">Add to cart</a>
+                                    }
+                                }
                             </li>
                         }
                     }
@@ -98,13 +115,15 @@
     </div>
     <div class="btns__next-page">
         <a class="next-page__btn next-page__btn--next" href="/Catalog/@Model.CalculatePrevious()"><</a>
-        @for (int i = Model.CurrentPage; i < Model.CurrentPage + 4 && i <= Model.NumberOfPages; i++)
-        {
-            <a class="next-page__btn next-page__btn--next" href="/Catalog/@i">@i</a>
-            if (Model.NumberOfPages > 4)
+        @{
+            if (Model.CurrentPage != 1)
             {
-                <a class="next-page__btn next-page__btn--span">...</a>
-                <a class="next-page__btn next-page__btn--last" href="/Catalog/@Model.NumberOfPages">@Model.NumberOfPages</a>
+                <a class="next-page__btn next-page__btn--next" href="/Catalog/1">1</a>
+            }
+            <a class="next-page__btn next-page__btn--next" style="background-color: #DDD" href="/Catalog/@Model.CurrentPage">@Model.CurrentPage</a>
+            if (Model.CurrentPage != Model.NumberOfPages)
+            {
+                <a class="next-page__btn next-page__btn--next" href="/Catalog/@Model.NumberOfPages">@Model.NumberOfPages</a>
             }
         }
         <a class="next-page__btn next-page__btn--next" href="/Catalog/@Model.CalculateNext()">></a>

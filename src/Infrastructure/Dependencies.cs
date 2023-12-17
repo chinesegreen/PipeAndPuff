@@ -31,13 +31,9 @@ namespace Infrastructure
             else
             {
                 services.AddDbContext<CatalogContext>(options =>
-                    options.UseNpgsql(configuration.GetConnectionString("CatalogConnection")));
+                    options.UseNpgsql(configuration.GetConnectionString("CatalogConnection"), sqlOptions => sqlOptions.EnableRetryOnFailure()));
                 services.AddDbContext<AppIdentityDbContext>(options =>
-<<<<<<< Updated upstream
-                    options.UseNpgsql(configuration.GetConnectionString("IdentityConnection")));
-=======
-                    options.UseSqlite(configuration.GetConnectionString("IdentityConnection")));
->>>>>>> Stashed changes
+                    options.UseNpgsql(configuration.GetConnectionString("IdentityConnection"), sqlOptions => sqlOptions.EnableRetryOnFailure()));
             }
         }
     }

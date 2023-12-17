@@ -1,0 +1,78 @@
+﻿@* @model
+ *@
+@{
+    ViewData["Title"] = "Orders";
+    Layout = "_AdminLayout";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/admin/orders.css">
+}
+
+<main class="main">
+    <div class="main-container">
+        <div class="main__title-block">
+            <div class="main__title-block--wrapper">
+                <p class="main__title">Список заказов</p>
+@*                 <div class="title-block__btns">
+                    <button class="title-block__btn title-block__btn--add">Add</button>
+                </div> *@
+            </div>
+            <!-- <div class="title-block__search-block">
+              <a href="#!" class="search-block__btn">Search</a>
+              <input type="text" name="searchArticul" id="searchArticul" class="search-block__inp" placeholder="Введите артикул">
+            </div> -->
+        </div>
+        <ul class="order__list">
+            <li class="order__item order__item--header">
+                <div class="order__info-block order__info-block--number">
+                    <p>Номер заказа</p>
+                </div>
+                <div class="order__info-block order__info-block--state">
+                    <p>Статус</p>
+                </div>
+                <div class="order__info-block order__info-block--date">
+                    <p>Дата оформления</p>
+                </div>
+                <div class="order__info-block order__info-block--article">
+                    <p>Артикул, кол-во</p>
+                </div>
+                <div class="order__info-block order__info-block--price">
+                    <p>Стоймость</p>
+                </div>
+                <div class="order__info-block order__info-block--fio">
+                    <p>ФИО покупателя</p>
+                </div>
+                <div class="order__info-block order__info-block--address">
+                    <p>Адрес доставки</p>
+                </div>
+            </li>
+
+            <div class="product__list-wrapper">
+            <li class="order__item">
+                <div class="order__info-block order__info-block--number">
+                    <p class="order__number">1</p>
+                </div>
+                <div class="order__info-block order__info-block--state">
+                    <p class="order__state">Готов к отгрузке</p>
+                </div>
+                <div class="order__info-block order__info-block--date">
+                    <p class="order__date">01.01.2000</p>
+                </div>
+                <div class="order__info-block order__info-block--article">
+                    <p class="order__article"><span class="order__span-article">C_102.01</span>, 5 шт.</p>
+                </div>
+                <div class="order__info-block order__info-block--price">
+                    <p class="order__price">6800 руб.</p>
+                </div>
+                <div class="order__info-block order__info-block--fio">
+                    <p class="order__fio">Свидорук Глеб Андреевич</p>
+                </div>
+                <div class="order__info-block order__info-block--address">
+                    <p class="order__address">Брянская обл., Брянский р-н, п. Пятилетка, ул. Куйбышева, д. 32</p>
+                </div>
+            </li>
+    </div>
+    </ul>
+    </div>
+</main>

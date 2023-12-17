@@ -10,76 +10,43 @@
 }   
 
 <section class="main-section">
-    <div class="main-section container">
-        <div class="main-section__img-block">
-            @if (Model.Images != null && Model.Images.Any())
-            {
-                foreach (var item in Model.Images)
+    <div class="main-section__wrapper container">
+        <div class="imgs-wrapper">
+            <div class="imgs-wrapper__preview-wrapper">
+                <div class="preview-wrapper__img-wrapper" style="background-image: url(@Model.Product.Picture);">
+                    <img src="@Model.Product.Picture" class="preview-wrapper__img">
+                </div>
+                @foreach (var img in Model.Product.Images)
                 {
-                    <img src="@item" class="img-block">
-                }
-            }
-        </div>
-        <div class="main-section__info-product">
-            <p class="info-product__name">@Model.Product.Name</p>
-            <div class="info-product__rating-block">
-                <div class="info-product__rating-item"></div>
-                <div class="info-product__rating-item"></div>
-                <div class="info-product__rating-item"></div>
-                <div class="info-product__rating-item"></div>
-                <div class="info-product__rating-item"></div>
-            </div>
-            <div class="info-product__price">$<span class="price">@Model.Product.Price.ToString("# rub")</span><span class="info-product__price--sale">@Model.Product.Price</span></div>
-            <p class="info-product__subtitle">@Model.Product.Description</p>
-            <div class="info-product__criterial">
-                <div class="criterial-wrapper">
-                    <p class="criterial-title">Criterion:</p>
-                    <select name="size-product" class="criterial-product__input criterial-product__option">
-                        <option value="none">Value 1</option>
-                        <option value="small">Value 2</option>
-                        <option value="medium">Value 3</option>
-                        <option value="large">Value 4</option>
-                        <option value="extra-large">Value 5</option>
-                    </select>
-                </div>
-                <div class="criterial-wrapper">
-                    <p class="criterial-title">Qty:</p>
-                    <div class="criterial-product__input criterial-product__count">
-                        <button class="criterial-product__count-btn criterial-product__count--down">-</button>
-                        <input type="number" class="criterial-product__count-input" min="1" max="10" value="1">
-                        <button class="criterial-product__count-btn criterial-product__count--up">+</button>
+                    <div class="preview-wrapper__img-wrapper" style="background-image: url(@img.Image);">
+                        <img src="@img.Image" class="preview-wrapper__img">
                     </div>
-                </div>
-                <button class="add-to-cart">add to cart</button>
+                }
             </div>
-            <div class="main-section__subinfo">
-                <div class="subinfo__category-block">
-                    <div class="category-block__desk">Category: 
-                        @foreach (var category in Model.GetCategories())
-                        {
-                            <span class="category-block__span"><a href="/Catalog/Categories/@category" class="category-block__link">@category</a></span>
-                        }
-                </div>
-                <div class="desk-block__wrapper">
-                    <p class="desk-block__title">Description</p>
-                    <p class="desk-block__desk">@Model.Product.Description</p>
-                </div>
+            <div class="imgs-wrapper__show-wrapper">
+                <img src="@Model.Product.Picture" class="show-wrapper__img">
             </div>
         </div>
-    </div>
-</section>
-<section class="rec-product-wrapper">
-    <div class="rec-product container">
-        <p class="res-product__title">You May Also Like</p>
-        <ul class="rec-product__list">
-            @* ? *@
-            <li class="rec-product__products-card">
-                <img src="/img/hqd.jpg" class="products-card__img">
-                <p class="products-card__title">(Название товара)</p>
-                <p class="products-card__price">(Цена)</p>
-                <button class="products-card__btn" id="1">Add to cart</button>
-            </li>
-        </ul>
+        <div class="product-info">
+            <p class="product-info__title">@Model.Product.Name</p>
+            <p class="product-info__article">@Model.Product.VendorCode</p>
+            <p class="product-info__price">@Model.Product.Price.ToString("# .00 rub")</p>
+            <p class="product-info__desk">@Model.Product.Description</p>
+            <label for="qty" class="qty-label">Qty: <input type="number" class="qty-input" value="1"></label>
+            <button class="btn-cart">Add to cart</button>
+            <ul class="category__list">
+                @if (Model.GetCategories().Any())
+                {
+                    <span>Categories:</span>
+                    foreach(var cat in Model.GetCategories())
+                    {
+                        <li class="category__item">
+                            <a class="category__link">@cat</a>
+                        </li>
+                    }
+                }
+            </ul>
+        </div>
     </div>
 </section>
 

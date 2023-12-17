@@ -1,9 +1,11 @@
-﻿using Infrastructure.Data;
+﻿using Core.Entities.ShowcaseAggregate;
+using Infrastructure.Data;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System.Diagnostics;
+using System.Security.Cryptography;
 using Web.Configuration;
 using Web.ViewModels;
 
@@ -22,7 +24,7 @@ namespace Web.Controllers
         public async Task<IActionResult> Index()
         {
 
-            var all = await _context.Products.Where(p => !p.IsDeleted).OrderBy(p => p.Date).ToListAsync();
+            var all = await _context.Products.Where(p => !p.IsDeleted && p.QuantityInStock > 0).OrderBy(p => p.Date).ToListAsync();
 
             var trending = all.Where(p => p.IsTrending).ToList();
 
@@ -36,10 +38,49 @@ namespace Web.Controllers
                 trending = trending.GetRange(trending.Count - 4, 4);
             }
 
+            ShowcaseTemplate template;
+            try
+            {
+                template = await _context.Showcases
+                    .Include(s => s.Main)
+                    .Include(s => s.Mone)
+                    .Include(s => s.Mtwo)
+                    .Include(s => s.Sone)
+                    .Include(s => s.Stwo)
+                    .Include(s => s.Sthree)
+                    .Include(s => s.Sfour).OrderBy(s => s.Id).LastAsync();
+            }
+            catch (Exception ex)
+            {
+                template = new ShowcaseTemplate()
+                {
+                    Main = new ShowcaseBlock(),
+                    Mone = new ShowcaseBlock(),
+                    Mtwo = new ShowcaseBlock(),
+                    Sone = new ShowcaseBlock(),
+                    Stwo = new ShowcaseBlock(),
+                    Sthree = new ShowcaseBlock(),
+                    Sfour = new ShowcaseBlock()
+                };
+            
+                _context.Add(template);
+                await _context.SaveChangesAsync();
+
+                template = await _context.Showcases
+                    .Include(s => s.Main)
+                    .Include(s => s.Mone)
+                    .Include(s => s.Mtwo)
+                    .Include(s => s.Sone)
+                    .Include(s => s.Stwo)
+                    .Include(s => s.Sthree)
+                    .Include(s => s.Sfour).OrderBy(s => s.Id).LastAsync();
+            }
+
             var model = new IndexViewModel()
             {
                 Trendings = trending,
-                RecentArrivals = all
+                RecentArrivals = all,
+                Template = template
             };
 
             return View(model);

@@ -1,5 +1,6 @@
 ﻿using Core.Entities;
 using Core.Entities.OrderAggregate;
+using Core.Entities.ShowcaseAggregate;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -21,6 +22,8 @@ namespace Infrastructure.Data
             //Database.EnsureCreated();
         }
 
+        public DbSet<ShowcaseBlock> ShowcaseBlocks { get; set; }
+        public DbSet<ShowcaseTemplate> Showcases { get; set; }
         public DbSet<Manufacturer> Manufacturers { get; set; }
         public DbSet<Dimensions> Dimensions { get; set; }
         public DbSet<Order> Orders { get; set; }

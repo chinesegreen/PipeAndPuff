@@ -1,4 +1,3 @@
-let imageUrl = '/img/image.png'
 $('.form__photo-wrapper').mouseenter((e) => {
     if ($($('.form__photo-label--img')[$('.form__photo-wrapper').index(e.currentTarget)]).attr('src') !== imageUrl) {
         $(e.currentTarget).find('label').find('div').addClass('remove-photo__bg')
@@ -15,7 +14,6 @@ $('.form__photo-wrapper').mouseenter((e) => {
     }
 })
 
-
 let saveData = (event) => {
     $('.form__btn-submit').off('click')
 
@@ -23,7 +21,8 @@ let saveData = (event) => {
     var data = new FormData();
 
     data.append("Price", $('#form').serializeObject()['Price']);
-    data.append("PriceWithoutDiscount", $('#form').serializeObject()['PriceWithoutDiscount']);
+    data.append("PriceWithoutDiscount", +$('#form').serializeObject()['PriceWithoutDiscount']);
+
     data.append("Name", $('#form').serializeObject()['Name']);
 
     data.append("Weight", $('#form').serializeObject()['Weight']);
@@ -37,8 +36,14 @@ let saveData = (event) => {
 
     data.append("Picture", $('#picture')[0].files[0]);
 
+    let pass = true
     $(`.form__input--file`).each((index, item) => {
-        data.append("Images", $(item)[0].files[0]);
+        if (pass) {
+            pass = false
+        }
+        else {
+            data.append("Images", $(item)[0].files[0]);
+        }
     });
 
     if ($('#form').serializeObject()['IsTrending'] == "on") {
@@ -62,21 +67,13 @@ let saveData = (event) => {
 
     xhr.addEventListener("readystatechange", function () {
         if (this.readyState === 4) {
-            location.href = /*xhr.getResponseHeader("Location")*/ "https://localhost:7214/Admin/Products";
+            location.href = /*xhr.getResponseHeader("Location")*/ `${domain}/Admin/Products`;
         }
     });
-
+   
     xhr.open("POST", requestUrl);
 
     xhr.send(data);
 }
 
 $('.form__btn-submit').on('click', saveData)
-
-/*
-
-     ороче странно отправл€ютс€ категории, не удал€ютс€ нужные
-
-
-
-*/

@@ -1,8 +1,10 @@
 ﻿using Ardalis.GuardClauses;
+using Core.Entities;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Runtime.CompilerServices;
+using Web.BindingModels;
 using Web.Features.MyOrders;
 using Web.Features.OrderDetails;
 
@@ -18,6 +20,16 @@ public class OrderController : Controller
     public OrderController(IMediator mediator)
     {
         _mediator = mediator;
+    }
+
+    public IActionResult Create([FromBody] CartData model)
+    {
+        if (!ModelState.IsValid)
+        {
+            return BadRequest(ModelState);
+        }
+
+        return View(model);
     }
 
     [HttpGet]

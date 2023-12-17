@@ -36,7 +36,7 @@ namespace Infrastructure.Services
                 await image.SaveAsPngAsync(fileStream);
             }
 
-            return $"/img/products/{name}";
+            return $"/img/{type}/{name}";
         }
     }
 }

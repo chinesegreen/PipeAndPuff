@@ -6,9 +6,12 @@ using Infrastructure.Data;
 using Infrastructure.Interfaces;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.EntityFrameworkCore;
 using System.Buffers.Text;
 using System.Diagnostics;
+using System.Security.Policy;
+using Web.BindingModels;
 using Web.Configuration;
 using Web.Features.Category;
 using Web.ViewModels;
@@ -17,6 +20,7 @@ namespace Web.Controllers
 {
     public class CatalogController : BaseController
     {
+        const string SessionKey = "_Filters";
         private readonly CatalogContext _context;
         private readonly IMediator _mediator;
         private readonly ILogger<CatalogController> _logger;
@@ -34,7 +38,42 @@ namespace Web.Controllers
         [HttpGet("[Controller]/{pageId}")]
         public async Task<IActionResult> Catalog(int pageId = 1)
         {
-            var products = await _context.Products.Where(p => !p.IsDeleted).ToListAsync();
+            var filters = GetFilters();
+
+            var products = _context.Products
+                .Where(p => !p.IsDeleted && p.Price <= filters.MaxPrice
+                && p.Price >= filters.MinPrice && p.QuantityInStock > 0);
+
+            if (filters.Manufacturers != null && filters.Manufacturers.Any())
+            {
+                var allowedBrands = await _context.Manufacturers
+                    .Where(m => filters.Manufacturers.Contains(m.Name))
+                    .Select(m => m.Id)
+                    .ToListAsync();
+
+                products = products.Where(p => allowedBrands.Contains(p.ManufacturerId ?? -1));
+            }
+            
+            var list = new List<Product>();
+            foreach (var product in products.Include(p => p.Categories))
+            {
+                bool include = true;
+
+                if (filters.Categories != null)
+                foreach (var cat in filters.Categories)
+                {
+                    if (product.Categories != null)
+                    if (!product.Categories.Select(c => c.Name).Contains(cat))
+                    {
+                        include = false;
+                    }
+                }
+
+                if (include)
+                {
+                    list.Add(product);
+                }
+            }
 
             List<Product> page = new List<Product>();
             int total = 0;
@@ -43,8 +82,8 @@ namespace Web.Controllers
             {
                 if (products != null && products.Any())
                 {
-                    page = GetPage(products, pageId);
-                    total = products.Count;
+                    page = GetPage(list, pageId);
+                    total = list.Count;
                 }
             }
             catch (Exception ex)
@@ -52,12 +91,22 @@ namespace Web.Controllers
                 _logger.LogError(ex.Message);
                 return View("/Error");
             }
+            
+            var brands = await _context.Manufacturers
+                .Select(m => m.Name)
+                .ToListAsync();
+            var categories = await _context.Categories
+                .Select(c => c.Name)
+                .ToListAsync();
 
             var model = new CatalogViewModel()
             {
                 Products = page,
                 CurrentPage = pageId,
-                TotalAmount = total
+                NumberOfPages = total / 35 + 1,
+                TotalAmount = total,
+                Brands = brands,
+                Categories = categories
             };
 
             return View(model);
@@ -66,8 +115,28 @@ namespace Web.Controllers
         [Route("[Controller]/[Action]/{searchString}")]
         public async Task<IActionResult> Search(string searchString, int pageId = 1)
         {
-            var products = from p in _context.Products
-                           select p;
+            var filters = GetFilters();
+
+            var products = _context.Products
+                .Where(p => !p.IsDeleted && p.Price <= filters.MaxPrice
+                && p.Price >= filters.MinPrice && p.QuantityInStock > 0);
+
+            if (filters.Manufacturers != null && filters.Manufacturers.Any())
+            {
+                var allowedBrands = await _context.Manufacturers
+                    .Where(m => filters.Manufacturers.Contains(m.Name))
+                    .Select(m => m.Id)
+                    .ToListAsync();
+
+                products = products.Where(p => allowedBrands.Contains(p.ManufacturerId ?? -1));
+            }
+
+            var brands = await _context.Manufacturers
+                .Select(m => m.Name)
+                .ToListAsync();
+            var categories = await _context.Categories
+                .Select(c => c.Name)
+                .ToListAsync();
 
             if (!String.IsNullOrEmpty(searchString))
             {
@@ -76,19 +145,38 @@ namespace Web.Controllers
                     && !p.IsDeleted);
             }
 
-            var viewProducts = await products.ToListAsync();
+            var list = new List<Product>();
+            foreach (var product in products.Include(p => p.Categories))
+            {
+                bool include = true;
+
+                if (filters.Categories != null)
+                foreach (var cat in filters.Categories)
+                {
+                    if (product.Categories != null)
+                    if (!product.Categories.Select(c => c.Name).Contains(cat))
+                    {
+                        include = false;
+                    }
+                }
+
+                if (include)
+                {
+                    list.Add(product);
+                }
+            }
 
             var model = new CatalogViewModel();
             int total = 0;
 
-            if (viewProducts != null && viewProducts.Any())
+            if (list != null && list.Any())
             {
                 var page = new List<Product>();
 
-                if (viewProducts != null)
+                if (list != null)
                 {
-                    page = GetPage(viewProducts, pageId);
-                    total = viewProducts.Count;
+                    page = GetPage(list, pageId);
+                    total = list.Count;
                 }
 
                 model.Products = page;
@@ -102,27 +190,33 @@ namespace Web.Controllers
                 model.TotalAmount = total;
             }
 
+            model.Brands = brands;
+            model.Categories = categories;
+
             return View(nameof(Catalog), model);
         }
 
         public async Task<IActionResult> Product(int id)
         {
-            var product = _context.Find<Product>(id);
-            var images = await _context.Images
-                .Where(i => i.ProductId == id)
-                .Select(i => i.Image)
-                .ToListAsync();
+            var product = await _context.Products
+                .Where(p => p.Id == id)
+                .Include(p => p.Categories)
+                .Include(p => p.Images)
+                .FirstAsync();
 
             if (product != null)
             {
-                // TODO
-                //product.Categories = await _context.Categories
-                //    .Where(c => c.)
+                
                 var model = new ProductViewModel()
                 {
                     Product = product,
-                    Images = images
                 };
+
+                var manufacturer = await _context.Manufacturers.Where(m => product.Id == m.Id).FirstOrDefaultAsync();
+                if (manufacturer == null)
+                    model.Manufacturer = "Empty";
+                else
+                    model.Manufacturer = manufacturer.Name;
 
                 return View(model);
             }
@@ -138,23 +232,65 @@ namespace Web.Controllers
             return View("Index", model);
         }
 
+        [HttpGet("[controller]/[Action]")]
+        public IActionResult RemoveFilters()
+        {
+            HttpContext.Session.Remove(SessionKey);
+            return Ok();
+        }
+
+        [HttpPost]
+        public IActionResult SetFilters([FromBody] SetFiltersCommand cmd)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+
+            var fg = new FilterAggregate()
+            {
+                MinPrice = cmd.MinPrice,
+                MaxPrice = cmd.MaxPrice,
+                Categories = cmd.Categories,
+                Manufacturers = cmd.Brands
+            };
+
+            HttpContext.Session.Set<FilterAggregate>(SessionKey, fg);
+
+            return Ok();
+        }
+
+        public FilterAggregate GetFilters()
+        {
+            FilterAggregate? fg = HttpContext.Session.Get<FilterAggregate>(SessionKey);
+
+            if (fg == null)
+            {
+                fg = new FilterAggregate();
+                HttpContext.Session.Set<FilterAggregate>(SessionKey, fg);
+            }
+
+            return fg;
+        }
+
         public static List<Product> GetPage(List<Product> products, int pageId)
         {
-            int index = (pageId - 1) * 32;
+            int index = (pageId - 1) * 35;
 
+            var page = new List<Product>();
             if (index < products.Count)
             {
-                for (int i = 32; i > 0; i--)
+                for (int i = 35; i > 0; i--)
                 {
                     if (index + i <= products.Count)
                     {
-                        var page = products.GetRange(index, i);
+                        page = products.GetRange(index, i);
                         return page;
                     }
                 }
             }
 
-            throw new ArgumentException("Page not found");
+            return page;
         }
     }
 }

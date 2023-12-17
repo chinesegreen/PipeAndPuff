@@ -1,0 +1,274 @@
+﻿body {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    max-width: 100%;
+    background-color: #f8f8f8;
+    color: #333;
+}
+
+h1, h2, h3, h4, h5, h6, ul, ol, li, p {
+    margin: 0;
+    padding: 0;
+}
+
+ul, ol {
+    list-style: none;
+}
+
+a {
+    text-decoration: none;
+    color: black;
+}
+
+img {
+    max-width: 100%;
+    display: block;
+}
+
+.account__wrapper {
+}
+
+.account {
+}
+
+.form {
+    /* width: 50%; */
+    padding: 15px;
+    background-color: #fff;
+}
+
+.account__title {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 32px;
+    font-weight: 500;
+    margin: 25px 0;
+}
+
+.form__list {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-gap: 15px;
+    margin-bottom: 35px;
+}
+
+.form__title {
+    margin: 5px 0 25px 0;
+    font-size: 20px;
+    font-weight: 500;
+}
+
+.account__label {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.star {
+}
+
+.account__input {
+    width: 100%;
+    padding: 12px 16px;
+    margin: 5px 0 0 0;
+    box-sizing: border-box;
+    border: 1px solid #D1D5DB;
+    border-radius: 0.25rem;
+    outline: none;
+    transition: .3s;
+}
+
+    .account__input:focus {
+        border: 1px solid #c96;
+    }
+
+.btn {
+    margin-top: 25px;
+    margin-bottom: 15px;
+}
+
+.btn__next {
+    border: 1px solid #333;
+    border-radius: 5px;
+    padding: 5px 15px;
+    background: none;
+    font-size: 20px;
+    color: #333;
+    transition: .3s;
+    cursor: pointer;
+}
+
+    .btn__next:hover {
+        border: 1px solid #c96;
+        background-color: #c96;
+        color: #fff;
+    }
+
+
+.fast-buy {
+    height: 550px;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    grid-template-areas: 'first first first second second'
+        'first first first third third'
+        'first first first third third';
+    grid-gap: 10px;
+}
+
+.fast-buy__category {
+    overflow: hidden;
+}
+
+.fast-buy__category--first {
+    grid-area: first;
+    /* background-color: #a337a3; */
+    background-image: url("https://trubmag.ru/images/blog/vredno_li_kurit_trubku.jpg");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    overflow: hidden;
+}
+
+.fast-buy__category--second {
+    grid-area: third;
+    /* background-color: #5f4f3c; */
+    background-image: url("https://trubmag.ru/images/blog/vredno_li_kurit_trubku.jpg");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.fast-buy__category--third {
+    grid-area: second;
+    /* background-color: #4c661c; */
+    background-image: url("https://trubmag.ru/images/blog/vredno_li_kurit_trubku.jpg");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.fast-buy__slider-wrapper {
+    margin: 0 50px;
+}
+
+.fast-buy__category--first {
+}
+
+.fast-buy__category-track {
+    padding: 0 100px;
+    position: relative;
+    display: flex;
+    overflow: hidden;
+}
+
+.fast-buy__category-view {
+    display: flex;
+    width: 100%;
+}
+
+.fast-buy__category {
+    flex-direction: column;
+    display: flex;
+    justify-content: center;
+    min-width: 100%;
+    height: 100%;
+}
+
+.fast-buy__subtitle {
+    font-weight: 200;
+    font-size: 20px;
+    color: #fff;
+}
+
+.fast-buy__title {
+    font-weight: 700;
+    font-size: 56px;
+    line-height: 1.2em;
+    margin-bottom: 15px;
+    color: #fff;
+}
+
+.fast-buy__btn {
+    display: block;
+    width: 150px;
+    padding: 15px 0;
+    text-transform: uppercase;
+    font-weight: 500;
+    background: none;
+    color: #fff;
+    border: 1px solid white;
+    box-sizing: border-box;
+    transition: .3s;
+    cursor: pointer;
+    outline: none;
+}
+
+    .fast-buy__btn:hover {
+        background-color: #CC9966;
+        border: 1px solid #CC9966;
+        transition: .3s;
+    }
+
+.fast-buy__category {
+    flex-direction: column;
+    display: flex;
+    justify-content: center;
+    position: relative;
+}
+
+.fast-buy__shadow {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #000;
+    opacity: 0;
+    transition: .3s;
+}
+
+.fast-buy__category:hover .fast-buy__shadow {
+    display: block;
+    opacity: 0.2;
+    transition: .3s;
+}
+
+.fast-buy__category--third {
+}
+
+.fast-buy__category--mini {
+    padding: 0 50px;
+    overflow: hidden;
+}
+
+.fast-buy__subtitle--mini {
+    font-weight: 200;
+    font-size: 16px;
+    color: #fff;
+    position: relative;
+    z-index: 500;
+}
+
+.fast-buy__title--mini {
+    font-size: 32px;
+    position: relative;
+    z-index: 500;
+}
+
+.fast-buy__btn--mini {
+    width: 125px;
+    padding: 8px 0;
+    position: relative;
+    z-index: 500;
+}
+
+.bgi {
+    position: absolute;
+    min-width: 100%;
+    min-height: 100%;
+    width: auto;
+    height: auto;
+}

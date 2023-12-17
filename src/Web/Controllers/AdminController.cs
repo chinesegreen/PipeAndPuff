@@ -1,4 +1,5 @@
-﻿using Ardalis.GuardClauses;
+﻿using Amazon.S3.Model.Internal.MarshallTransformations;
+using Ardalis.GuardClauses;
 using Core.Entities;
 using Infrastructure.Data;
 using Infrastructure.Identity;
@@ -7,6 +8,7 @@ using Infrastructure.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Routing.Template;
 using Microsoft.CodeAnalysis.Elfie.Diagnostics;
 using Microsoft.EntityFrameworkCore;
 using NuGet.Packaging.Signing;
@@ -32,13 +34,41 @@ namespace Web.Controllers
             return RedirectToAction(nameof(Products));
         }
 
-        public async Task<IActionResult> Products()
+        public IActionResult Orders()
+        {
+            return View();
+        }
+
+        public async Task<IActionResult> Showcase()
+        {
+            var template = await _context.Showcases
+                .Include(s => s.Main)
+                .Include(s => s.Mone)
+                .Include(s => s.Mtwo)
+                .Include(s => s.Sone)
+                .Include(s => s.Stwo)
+                .Include(s => s.Sthree)
+                .Include(s => s.Sfour).OrderBy(s => s.Id).LastAsync();
+
+            var model = new ShowcaseViewModel()
+            {
+                Template = template
+            };
+
+            return View(model);
+        }
+
+        [Route("[controller]/[Action]")]
+        [Route("[controller]/[Action]/{pageId}")]
+        public async Task<IActionResult> Products(int pageId = 1)
         {
             var products = await _context.Products.OrderBy(p => p.Date).ToListAsync();
 
             var model = new CatalogViewModel()
             {
-                Products = products
+                Products = CatalogController.GetPage(products, pageId),
+                CurrentPage = pageId,
+                NumberOfPages = products.Count / 35 + 1
             };
 
             return View(model);
@@ -141,8 +171,9 @@ namespace Web.Controllers
             return Redirect("/Admin/Products");
         }
 
-        [HttpGet("[controller]/[action]/{searchString}")]
-        public async Task<IActionResult> Search(string searchString)
+        [Route("[controller]/[action]/{searchString}")]
+        [Route("[controller]/[action]/{searchString}/{pageId}")]
+        public async Task<IActionResult> Search(string searchString, int pageId = 1)
         {
             var products = from p in _context.Products
                            select p;
@@ -157,7 +188,9 @@ namespace Web.Controllers
 
             var model = new CatalogViewModel()
             {
-                Products = viewProducts
+                Products = CatalogController.GetPage(viewProducts, pageId),
+                CurrentPage = pageId,
+                TotalAmount = viewProducts.Count()
             };
 
             return View(nameof(Products), model);

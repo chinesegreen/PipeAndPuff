@@ -4,8 +4,11 @@
     ViewData["Title"] = "Resend email confirmation";
 }
 
-<h1>@ViewData["Title"]</h1>
-<h2>Enter your email.</h2>
+@section Styles {
+    <link rel="stylesheet" href="~/css/pages/login-page.css" />
+}
+
+@* <h2>Enter your email.</h2>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -18,6 +21,26 @@
             </div>
             <button type="submit" class="w-100 btn btn-lg btn-primary">Resend</button>
         </form>
+    </div>
+</div> *@
+
+<div class="login__wrapper">
+    <div class="login-block container">
+        <div class="row">
+            <div class="col-md-4">
+                <form method="post">
+                    <h2 class="login-block__title" style="border: none;">@ViewData["Title"].</h2>
+                    <h2 class="login-block__title" style="margin-bottom: 15px;">Enter your email.</h2>
+                    <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+                    <div class="form-floating mb-3">
+                        <input asp-for="Input.Email" class="login-block__input form-control" autocomplete="username" aria-required="true" placeholder="name@example.com" style="margin-bottom: 15px;" />
+                        <label asp-for="Input.Email" class="login-block__label form-label"></label>
+                        <span asp-validation-for="Input.Email" class="text-danger"></span>
+                    </div>
+                    <button type="submit" class="w-100 btn btn-lg btn-primary login-block__btn-login">Resend</button>
+                </form>
+            </div>
+        </div>
     </div>
 </div>
 

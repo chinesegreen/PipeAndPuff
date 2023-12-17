@@ -11,7 +11,6 @@ namespace Web.BindingModels
         public string VendorCode { get; set; }
         public string? Manufacturer { get; set; }
         public string? Description { get; set; }
-        public int QuantityInStock { get; set; } = 0;
         public List<string>? Categories { get; set; }
         public int ValueTax { get; set; }
         public bool? IsTrending { get; set; }
@@ -19,12 +18,5 @@ namespace Web.BindingModels
         public int? Length { get; set; }
         public int? Width { get; set; }
         public int? Height { get; set; }
-
-        public List<string>? GetCategories()
-        {
-            if (Categories == null) return null;
-
-            return Categories.GroupBy(x => x).Select(x => x.First()).ToList();
-        }
     }
 }

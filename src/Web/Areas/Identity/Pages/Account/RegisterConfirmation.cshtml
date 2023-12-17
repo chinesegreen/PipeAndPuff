@@ -4,8 +4,7 @@
     ViewData["Title"] = "Register confirmation";
 }
 
-<h1>@ViewData["Title"]</h1>
-@{
+@* @{
     if (@Model.DisplayConfirmAccountLink)
     {
 <p>
@@ -20,3 +19,23 @@
 </p>
     }
 }
+ *@
+<div class="login__wrapper">
+    <div class="login-block container">
+        @{
+            if (@Model.DisplayConfirmAccountLink)
+            {
+                <p class="login-block__title" style="margin-bottom: 0; width: 900px;">
+                    This app does not currently have a real email sender registered, see <a href="https://aka.ms/aspaccountconf">these docs</a> for how to configure a real email sender.
+                    Normally this would be emailed:<br><a id="confirm-link" href="@Model.EmailConfirmationUrl" class="login-block__btn-login" style="display: inline-block;margin: 15px 0 0 0;">Click here to confirm your account</a>
+                </p>
+            }
+            else
+            {
+                <p class="login-block__title" style="margin-bottom: 0;">
+                    Please check your email to confirm your account.
+                </p>
+            }
+        }
+    </div>
+</div>

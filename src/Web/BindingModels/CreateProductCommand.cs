@@ -20,12 +20,5 @@ namespace Web.BindingModels
         public int? Length { get; set; }
         public int? Width { get; set; }
         public int? Height { get; set; }
-
-        public List<string>? GetCategories()
-        {
-            if (Categories == null) return null;
-
-            return Categories.GroupBy(x => x).Select(x => x.First()).ToList();
-        }
     }
 }

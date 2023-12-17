@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="~/css/admin/create-page.css">
 }
 
-<main class="main">
+<main class="main" id="@Model.Product.Id">
     <div class="main-container">
         <div class="main__title-block">
             <p class="main__title">Редактирование товара</p>
@@ -20,22 +20,62 @@
                 <p class="form__title">Фото</p>
                 <div class="form__wrapper-photo">
                     <div class="form__photo-wrapper">
-                        <div class="remove-photo__plus">X</div>
+                        <div class="remove-photo__plus" style="display: none;">X</div>
                         <label for="picture" class="form__photo--main form__photo-label">
                             <div></div>
                             <img class="form__photo-label--img" src="@Model.Product.Picture">
+                            <input class="form__input form__input--file" type="file" name="picture" id="picture">
                         </label>
                     </div>
 
                     <div class="form__photo-blocks">
                         @{
-                            if (Model.Images != null && Model.Images.Any())
+                            int i = 0;
+                            if (Model.Product.Images != null && Model.Product.Images.Any())
                             {
-                                
+                                for (; i < Model.Product.Images.Count; i++)
+                                {
+                                    <div class="form__photo-wrapper">
+                                        <div class="remove-photo__plus">X</div>
+                                        <label for="Image@(i)" class="form__photo form__photo-label"><img class="form__photo-label--img" src="@Model.Product.Images[i].Image">
+                                            <div></div>
+                                            <input class="form__input form__input--file" type="file" name="Image@(i)" id="Image@(i)">
+                                        </label>
+                                    </div>
+                                }
+                            }
+                            for (i=i+2; i < 8; i++)
+                            {
+                                <div class="form__photo-wrapper">
+                                    <div class="remove-photo__plus">X</div>
+                                    <label for="Image@(i)" class="form__photo form__photo-label"><img class="form__photo-label--img" src="/img/image.png">
+                                        <div></div>
+                                        <input class="form__input form__input--file" type="file" name="Image@(i)" id="Image@(i)">
+                                    </label>
+                                </div>
                             }
                         }
                     </div>
                 </div>
+
+                <p class="form__title">Количество на складе</p>
+                
+                <div class="form__block-duo">
+                    @{
+                        if (Model.Product.QuantityInStock != 0 )
+                        {
+                            <input type="text" value="@Model.Product.QuantityInStock" name="Quantity" class="form__input form__input-quantity" placeholder="Количество, шт.">
+                        }
+                        
+                        else
+                        {
+                            <input type="text" name="Quantity" class="form__input form__input-quantity" placeholder="Количество">
+                        }
+                    }
+                    
+                    <button class="form__btn-send">Отправить</button>
+                </div>
+ 
 
                 <p class="form__title">Информация о товаре</p>
 
@@ -52,43 +92,105 @@
                     <a class="form__categories--btn">+</a>
                 </div>
 
-                <input type="text" name="Name" class="form__input" placeholder="Название">
-                <input type="text" name="Manufacturer" class="form__input" placeholder="Производитель">
-                <input type="text" name="VendorCode" class="form__input" placeholder="Артикул *">
-                <textarea type="text" name="Description" class="form__input form__input--area" placeholder="Описание" maxlength="500"></textarea>
+                <input type="text" value="@Model.Product.Name" name="Name" class="form__input" placeholder="Название *">
+                <input type="text" value="@Model.Manufacturer" name="Manufacturer" class="form__input" placeholder="Производитель">
+                <input type="text" value="@Model.Product.VendorCode" name="VendorCode" class="form__input" placeholder="Артикул *">
+                <textarea type="text" name="Description" class="form__input form__input--area" placeholder="Описание" maxlength="500">@Model.Product.Description</textarea>
                 <div class="form__block-duo">
-                    <input type="number" name="Price" class="form__input" placeholder="Цена *">
-                    <input type="number" name="PriceWithoutDiscount" class="form__input" placeholder="Цена до скидки">
+                    <input type="number" value="@Model.Product.Price" name="Price" class="form__input" placeholder="Цена *">
+                    <input type="number" value="@Model.Product.PriceWithoutDiscount" name="PriceWithoutDiscount" class="form__input" placeholder="Цена до скидки">
                 </div>
                 <div class="form__checkbox">
-                    <input type="checkbox" name="IsTrending" id="IsTrending">
+                    @if (Model.Product.IsTrending)
+                    {
+                        <input type="checkbox" name="IsTrending" id="IsTrending" checked>
+                    }
+                    else
+                    {
+                        <input type="checkbox" name="IsTrending" id="IsTrending">
+                    }
                     <label for="IsTrending">Добавить продукт в тренды?</label>
                 </div>
                 <div class="form__wrapper-radio">
                     <p class="block-radio__title">НДС (налог на добавочную стоймость) *</p>
-                    <div class="form__block-radio">
-                        <div class="form__radio">
-                            <input type="radio" name="ValueTax" id="nds10" class="form__radio-input" value="10">
-                            <label class="form__radio-tile" for="nds10">10%</label>
-                        </div>
-                        <div class="form__radio">
-                            <input type="radio" name="ValueTax" id="nds20" class="form__radio-input" value="20">
-                            <label class="form__radio-tile" for="nds20">20%</label>
-                        </div>
-                        <div class="form__radio">
-                            <input type="radio" name="ValueTax" id="ndsNone" class="form__radio-input" value="0" checked>
-                            <label class="form__radio-tile" for="ndsNone">Не облагается</label>
-                        </div>
-                    </div>
+                    @{
+                        var v = Model.Product.ValueTax;
+                        if (v == 10)
+                        {
+                            <div class="form__block-radio">
+                                <div class="form__radio">
+                                    <input type="radio" name="ValueTax" id="nds10" class="form__radio-input" value="10" checked>
+                                    <label class="form__radio-tile" for="nds10">10%</label>
+                                </div>
+                                <div class="form__radio">
+                                    <input type="radio" name="ValueTax" id="nds20" class="form__radio-input" value="20">
+                                    <label class="form__radio-tile" for="nds20">20%</label>
+                                </div>
+                                <div class="form__radio">
+                                    <input type="radio" name="ValueTax" id="ndsNone" class="form__radio-input" value="0">
+                                    <label class="form__radio-tile" for="ndsNone">Не облагается</label>
+                                </div>
+                            </div>
+                        }
+                        else if (v == 20)
+                        {
+                            <div class="form__block-radio">
+                                <div class="form__radio">
+                                    <input type="radio" name="ValueTax" id="nds10" class="form__radio-input" value="10">
+                                    <label class="form__radio-tile" for="nds10">10%</label>
+                                </div>
+                                <div class="form__radio">
+                                    <input type="radio" name="ValueTax" id="nds20" class="form__radio-input" value="20" checked>
+                                    <label class="form__radio-tile" for="nds20">20%</label>
+                                </div>
+                                <div class="form__radio">
+                                    <input type="radio" name="ValueTax" id="ndsNone" class="form__radio-input" value="0">
+                                    <label class="form__radio-tile" for="ndsNone">Не облагается</label>
+                                </div>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="form__block-radio">
+                                <div class="form__radio">
+                                    <input type="radio" name="ValueTax" id="nds10" class="form__radio-input" value="10">
+                                    <label class="form__radio-tile" for="nds10">10%</label>
+                                </div>
+                                <div class="form__radio">
+                                    <input type="radio" name="ValueTax" id="nds20" class="form__radio-input" value="20">
+                                    <label class="form__radio-tile" for="nds20">20%</label>
+                                </div>
+                                <div class="form__radio">
+                                    <input type="radio" name="ValueTax" id="ndsNone" class="form__radio-input" value="0" checked>
+                                    <label class="form__radio-tile" for="ndsNone">Не облагается</label>
+                                </div>
+                            </div>
+                        }
+                    }
                 </div>
                 <p class="form__title">Габариты и вес</p>
-                <input class="form__input form__input--select" type="text" placeholder="Длина упаковки, мм" name="Length">
-                <input class="form__input form__input--select" type="text" placeholder="Ширина упаковки, мм" name="Width">
-                <input class="form__input form__input--select" type="text" placeholder="Высота упаковки, мм" name="Height">
-                <input class="form__input form__input--select" type="text" placeholder="Вес упаковки, г" name="Weight">
-                <input class="form__input form__input--file" type="file" name="picture" id="picture">
+                @{
+                    var dimensions = Model.Product.Dimensions;
 
-                <a class="form__btn-submit">Завершить редактирование</a>
+                    if (dimensions == null)
+                    {
+                        <input class="form__input form__input--select" type="text" placeholder="Длина упаковки, мм" name="Length">
+                        <input class="form__input form__input--select" type="text" placeholder="Ширина упаковки, мм" name="Width">
+                        <input class="form__input form__input--select" type="text" placeholder="Высота упаковки, мм" name="Height">
+                        <input class="form__input form__input--select" type="text" placeholder="Вес упаковки, г" name="Weight">
+                        <input class="form__input form__input--file" type="file" name="picture" id="picture">
+                    }
+                    else
+                    {
+                        <input value="@dimensions.Length" class="form__input form__input--select" type="text" placeholder="Длина упаковки, мм" name="Length">
+                        <input value="@dimensions.Width" class="form__input form__input--select" type="text" placeholder="Ширина упаковки, мм" name="Width">
+                        <input value="@dimensions.Height" class="form__input form__input--select" type="text" placeholder="Высота упаковки, мм" name="Height">
+                        <input value="@dimensions.Weight" class="form__input form__input--select" type="text" placeholder="Вес упаковки, г" name="Weight">
+                        <input class="form__input form__input--file" type="file" name="picture" id="picture">
+                    }
+                }
+
+                <a class="form__btn-submit form__btn-edit--data">Завершить редактирование</a>
             </section>
         </form>
     </div>

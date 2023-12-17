@@ -1,0 +1,33 @@
+﻿@using Web.BindingModels;
+@model CartData
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+@{
+    var user = await UserManager.GetUserAsync(User);
+    var claims = await SignInManager.UserManager.GetClaimsAsync(user);
+
+    var total = Model.Data.Values.Sum();
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/pages/order.css">
+}
+
+<main class="main__wrapper" style="margin-top: 15px;">
+    <div class="main container">
+        <p class="main__title">Оформление заказа</p>
+        <form class="form">
+            <div class="form__block">
+                <p class="form__title">1. Данные получателя</p>
+                <label for="user" class="form__user">@await UserManager.GetUserNameAsync(user) @await UserManager.GetPhoneNumberAsync(user) *@await UserManager.GetEmailAsync(user)*<input type="radio" id="user" checked></label>
+            </div>
+            <div class="form__block">
+                <p class="form__title">2. Доставка</p>
+                <div id="map" style="width: 100%; height: 500px"></div>
+            </div>
+            <p class="price">Итоговая сумма: @total.ToString("# rub");
+            </p>
+            <button class="send">Перейти к оплате</button>
+        </form>
+    </div>
+</main>

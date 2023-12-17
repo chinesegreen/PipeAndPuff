@@ -43,6 +43,40 @@ img {
         border: 2px solid #fff;
     }
 
+.btns__next-page {
+    margin: 25px 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.next-page__btn {
+    width: 30px;
+    height: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #e9e9e9;
+    color: #333;
+}
+
+    .next-page__btn:first-child {
+        border-radius: 50% 0 0 50%;
+    }
+
+    .next-page__btn:last-child {
+        border-radius: 0 50% 50% 0;
+    }
+
+.next-page__btn--next {
+}
+
+.next-page__btn--span {
+}
+
+.next-page__btn--last {
+}
+
 .title-block__btn-remove {
     background: none;
     border: 1px solid #216BFF;
